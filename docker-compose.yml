@@ -1,0 +1,52 @@
+services:
+  dev-container: # service name
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    image: mydevimage
+    tty: true # docker run -t
+    stdin_open: true # docker run -i
+    user: "${UID:?error}:${UID:?error}" # map user id of current user into container ("be yourself" in the container). If this variable is not seen by docker compose, do "export UID"
+    privileged: true
+    group_add:
+      - dialout
+      - sudo
+    working_dir: ${PWD:?error}
+    volumes:
+       - type: bind
+         source: /etc/passwd
+         target: /etc/passwd
+         read_only: true
+
+       # allow to "sudo" with normal password
+       - type: bind
+         source: /etc/shadow
+         target: /etc/shadow
+         read_only: true
+
+       - type: bind
+         source: /etc/group
+         target: /etc/group
+         read_only: true
+
+       # share git config and ssh keys. Allows container processes to perform git action (Useful for working with IDE & .devcontainer)
+       - type: bind
+         source: /home/${USER:?error}/.gitconfig
+         target: /home/${USER:?error}/.gitconfig
+         read_only: false
+
+       - type: bind
+         source: /home/${USER:?error}/.ssh
+         target: /home/${USER:?error}/.ssh
+         read_only: false
+
+       # share bash history between devenv and local shell
+       - type: bind
+         source: /home/${USER:?error}/.bash_history
+         target: /home/${USER:?error}/.bash_history
+         read_only: false
+
+       - type: bind
+         source: .
+         target: ${PWD:?error}
+         read_only: false

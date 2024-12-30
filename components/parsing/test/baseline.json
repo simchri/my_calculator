@@ -1,0 +1,196 @@
+{
+  "context": {
+    "date": "2024-12-25T10:02:04+00:00",
+    "host_name": "77042298797b",
+    "executable": "/home/massmde/ws/my_parser/build/components/parsing/parsing_benchmarks",
+    "num_cpus": 8,
+    "mhz_per_cpu": 4400,
+    "cpu_scaling_enabled": true,
+    "caches": [
+      {
+        "type": "Data",
+        "level": 1,
+        "size": 49152,
+        "num_sharing": 2
+      },
+      {
+        "type": "Instruction",
+        "level": 1,
+        "size": 32768,
+        "num_sharing": 2
+      },
+      {
+        "type": "Unified",
+        "level": 2,
+        "size": 1310720,
+        "num_sharing": 2
+      },
+      {
+        "type": "Unified",
+        "level": 3,
+        "size": 8388608,
+        "num_sharing": 8
+      }
+    ],
+    "load_avg": [0.97,1,0.92],
+    "library_build_type": "release"
+  },
+  "benchmarks": [
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 0,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8497172552809549e+04,
+      "cpu_time": 2.8496127133488128e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 1,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8664144201326879e+04,
+      "cpu_time": 2.8663227585645036e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 2,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8484466658490626e+04,
+      "cpu_time": 2.8484544747240219e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 3,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8585889445600566e+04,
+      "cpu_time": 2.8540571224897136e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 4,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8413569228904205e+04,
+      "cpu_time": 2.8412677746547721e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 5,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8479815267404188e+04,
+      "cpu_time": 2.8479190231781326e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 6,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8894020774772573e+04,
+      "cpu_time": 2.8884751680312827e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 7,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8487821540631681e+04,
+      "cpu_time": 2.8447163224571286e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 8,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8810933602169946e+04,
+      "cpu_time": 2.8804624831968711e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval",
+      "run_name": "BM_eval",
+      "run_type": "iteration",
+      "repetitions": 0,
+      "repetition_index": 9,
+      "threads": 1,
+      "iterations": 24549,
+      "real_time": 2.8494969448920034e+04,
+      "cpu_time": 2.8492525153774073e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval_mean",
+      "run_name": "BM_eval",
+      "run_type": "aggregate",
+      "repetitions": 0,
+      "threads": 1,
+      "aggregate_name": "mean",
+      "iterations": 10,
+      "real_time": 2.8581280272103024e+04,
+      "cpu_time": 2.8570540356022648e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval_median",
+      "run_name": "BM_eval",
+      "run_type": "aggregate",
+      "repetitions": 0,
+      "threads": 1,
+      "aggregate_name": "median",
+      "iterations": 10,
+      "real_time": 2.8496071000864798e+04,
+      "cpu_time": 2.8494326143631108e+04,
+      "time_unit": "ns"
+    },
+    {
+      "name": "BM_eval_stddev",
+      "run_name": "BM_eval",
+      "run_type": "aggregate",
+      "repetitions": 0,
+      "threads": 1,
+      "aggregate_name": "stddev",
+      "iterations": 10,
+      "real_time": 1.5933478638459749e+02,
+      "cpu_time": 1.6004154980598304e+02,
+      "time_unit": "ns"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "name": "dev environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "dev-container",
+}
