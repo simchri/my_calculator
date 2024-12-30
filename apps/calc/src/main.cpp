@@ -13,7 +13,7 @@ int main() {
 
     auto vm = view::ViewModel{.history = {}, .input = "", .current_calculation = ""};
 
-    auto input_box = Input(&vm.input, "input");
+    auto input_box = Input(&vm.input, "input", InputOption::Default());
 
     input_box |= CatchEvent([&](const Event& event) {
         if (event == Event::Character('q')) {
