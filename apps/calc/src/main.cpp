@@ -55,8 +55,8 @@ int main() {
                                [&]() -> std::vector<Element> {
                                    std::vector<Element> elements;
                                    elements.reserve(vm.history.size());
-                                   for (auto& i : vm.history) {
-                                       elements.push_back(paragraph(i));
+                                   for (auto& history_item : vm.history) {
+                                       elements.push_back(paragraph(history_item));
                                    }
                                    return elements;
                                }())) |
