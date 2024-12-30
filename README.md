@@ -46,5 +46,5 @@ Update the reference by replacing the file `components/parsing/test/baseline.jso
 
 ### Run
 ```
-./build/apps/my_calc/my_calc
+./build/apps/calc/calc
 ```
