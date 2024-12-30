@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.29)
 
-project(my-calc)
+project(my_calculator)
 # project name is provided in the variable CMAKE_PROJECT_NAME for use elsewhere
 
 # configuration (must be done after project() call)

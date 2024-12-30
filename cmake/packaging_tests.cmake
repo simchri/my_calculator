@@ -6,7 +6,7 @@ add_test(
   COMMAND
     ${CMAKE_SOURCE_DIR}/scripts/package_contents.bash
     ${CMAKE_CURRENT_BINARY_DIR}             # expect to find in this directory ..
-    "my-calc"                               # a .deb package (file) with package name "my-calc"
+    "my_calculator"                         # a .deb package (file) with package name "my-calc"
     "/usr/bin/calc"                         # containing the file /usr/bin/calc
 )
-set_tests_properties(expect_package_bin PROPERTIES LABELS "packaging;slow")
+set_tests_properties(check_package_contents PROPERTIES LABELS "packaging;slow")
