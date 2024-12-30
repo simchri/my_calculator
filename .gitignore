@@ -84,11 +84,3 @@ tags
 # Language servers
 # clangd
 .cache
-
-## Repository Structure specific settings
-# every directory starting with "build.." has been ignored, but we want to version the "build" dependency lists.
-# reinclude these directories:
-!dependencies/*/build-private
-!dependencies/*/build-public
-
-apps/demo
