@@ -46,7 +46,7 @@ function script_body() {
 
   # 'dev-container' = service name as defined in compose file.
   # 'my_calc' = name of directory containing compose file
-  docker exec -it my_calc-dev-container-1 bash || true # evade set -e, to always print goodbye message
+  docker exec -it my_calculator-dev-container-1 bash || true # evade set -e, to always print goodbye message
   printf "\nclosing dev-env shell. You may want to stop the docker container process with\n\
 docker compose stop \n"
 }
