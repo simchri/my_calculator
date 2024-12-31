@@ -33,7 +33,7 @@ namespace parsing {
 
         std::vector<std::unique_ptr<node>> tokens;
 
-        int str_ind = 0;
+        size_t str_ind = 0;
         int str_ind_section_start = 0;
         auto str_ind_end = input.length() - 1;
         while (str_ind <= str_ind_end) {
@@ -84,7 +84,7 @@ namespace parsing {
 
         auto item = std::move(stack.back());
         stack.pop_back();
-        return std::move(item);
+        return item;
     }
 
     void collapse_group(std::vector<std::unique_ptr<node>>& stack) {

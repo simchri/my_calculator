@@ -12,7 +12,7 @@ using namespace testing;
 
 #define DEXPECT_VECU_EQ(x,y)                                                          \
     ASSERT_EQ((x).size(), (y).size()) << "Vectors x and y are of unequal length";    \
-    for (int i = 0; i < (x).size(); ++i) {                                           \
+    for (size_t i = 0; i < (x).size(); ++i) {                                           \
         EXPECT_EQ(*(x)[i], *(y)[i]) << "Vectors x and y differ at index " << i;      \
     }                                                                                \
 
