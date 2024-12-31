@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.29)
 project(my_calculator)
 # project name is provided in the variable CMAKE_PROJECT_NAME for use elsewhere
 
+set(COMPILE_WARNING_OPTIONS "-Werror -Wall -Wextra" )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILE_WARNING_OPTIONS}")
+
 # configuration (must be done after project() call)
 include(cmake/mytarget.cmake)
 include(cmake/compiler.cmake)
