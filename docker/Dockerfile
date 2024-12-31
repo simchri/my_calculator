@@ -35,3 +35,4 @@ RUN pip install --no-cache-dir --upgrade pip && \
 
 RUN apt-get install -y clangd=1:11.0-51+nmu5
 
+RUN apt-get install -y cppcheck=2.3-1

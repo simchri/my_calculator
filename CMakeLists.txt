@@ -8,6 +8,7 @@ include(cmake/mytarget.cmake)
 include(cmake/compiler.cmake)
 include(cmake/packaging.cmake)
 include(cmake/packaging_tests.cmake)
+include(cmake/static_code_analysis.cmake)
 
 # subdirectories containing source code
 add_subdirectory(components)
