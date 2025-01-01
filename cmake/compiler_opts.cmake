@@ -5,7 +5,6 @@ string(APPEND compile_warning_options " -Wextra" ) # enable some more wanings no
 string(APPEND compile_warning_options " -Wunused" ) # enable warnings for unused variables
 string(APPEND compile_warning_options " -Wformat" ) # enable warnings for format strings
 string(APPEND compile_warning_options " -Wmissing-include-dirs" ) # enable warnings for missing include directories
-string(APPEND compile_warning_options " -Wno-pessimizing-move" ) # disable warnings for pessimizing moves
 string(APPEND compile_warning_options " -Wfloat-equal" ) # enable warnings for floating point comparisons
 string(APPEND compile_warning_options " -Wswitch-default" ) # enable warnings for missing default cases in switch statements
 string(APPEND compile_warning_options " -Wdouble-promotion" ) # enable warnings for implicit double to float promotions
