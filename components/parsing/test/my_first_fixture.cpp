@@ -8,8 +8,6 @@
 using namespace parsing;
 using namespace testing;
 
-// clang-format off
-
 void EXPECT_VECU_EQ(const std::vector<std::unique_ptr<node>>& x, const std::vector<std::unique_ptr<node>>& y) {
 
     // note that if this assert fails, it only returns from this function, but does not stop the rest of the test
@@ -19,8 +17,6 @@ void EXPECT_VECU_EQ(const std::vector<std::unique_ptr<node>>& x, const std::vect
         EXPECT_EQ(*x[i], *y[i]) << "Vectors x and y differ at index " << i;
     }
 }
-
-// clang-format on
 
 // AST node comparison tests:
 TEST(IASTNodeUnitTests, input_1_1_eq) {
