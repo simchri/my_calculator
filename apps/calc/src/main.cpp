@@ -8,7 +8,6 @@
 
 int main() {
     using namespace ftxui;
-
     auto screen = ScreenInteractive::Fullscreen();
 
     auto vm = view::ViewModel{.history = {}, .input = "", .current_calculation = ""};

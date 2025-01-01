@@ -6,8 +6,10 @@ project(my_calculator)
 # configuration (must be done after project() call)
 include(cmake/mytarget.cmake)
 include(cmake/compiler.cmake)
+include(cmake/compiler_opts.cmake)
 include(cmake/packaging.cmake)
 include(cmake/packaging_tests.cmake)
+include(cmake/static_code_analysis.cmake)
 
 # subdirectories containing source code
 add_subdirectory(components)

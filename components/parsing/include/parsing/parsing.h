@@ -6,13 +6,13 @@
 
 namespace parsing {
 
-    enum Type { NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
+    enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
 
     struct node {
-        Type type;
-        int value;
-        std::unique_ptr<node> left;
-        std::unique_ptr<node> right;
+        Type type{UNDEFINED};
+        int value{0};
+        std::unique_ptr<node> left{};
+        std::unique_ptr<node> right{};
 
         bool operator==(const node& other) const;
     };
