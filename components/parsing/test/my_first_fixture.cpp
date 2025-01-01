@@ -10,15 +10,15 @@ using namespace testing;
 
 // clang-format off
 
-#define DEXPECT_VECU_EQ(x,y)                                                          \
-    ASSERT_EQ((x).size(), (y).size()) << "Vectors x and y are of unequal length";    \
-    for (size_t i = 0; i < (x).size(); ++i) {                                           \
-        EXPECT_EQ(*(x)[i], *(y)[i]) << "Vectors x and y differ at index " << i;      \
-    }                                                                                \
+void EXPECT_VECU_EQ(const std::vector<std::unique_ptr<node>>& x, const std::vector<std::unique_ptr<node>>& y) {
 
-#define EXPECT_VECU_EQ(x,y) \
-    auto b=(y);  \
-    DEXPECT_VECU_EQ(x,b)
+    // note that if this assert fails, it only returns from this function, but does not stop the rest of the test
+    ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
+
+    for (size_t i = 0; i < x.size(); ++i) {
+        EXPECT_EQ(*x[i], *y[i]) << "Vectors x and y differ at index " << i;
+    }
+}
 
 // clang-format on
 
@@ -62,14 +62,14 @@ TEST(IASTNodeUnitTests, input_1withChild_1withChildOtherValue_ne) {
 TEST(ITokenizerUnitTests, tokenize_1) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1}));
-    EXPECT_VECU_EQ(expected, { tokenize("1"); })
+    EXPECT_VECU_EQ(expected, {tokenize("1")});
 }
 
 TEST(ITokenizerUnitTests, tokenize_2plus) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2}));
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_PLUS}));
-    EXPECT_VECU_EQ(expected, tokenize("2+"))
+    EXPECT_VECU_EQ(expected, tokenize("2+"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_2plus1) {
@@ -77,13 +77,13 @@ TEST(ITokenizerUnitTests, tokenize_2plus1) {
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2}));
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_PLUS}));
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1}));
-    EXPECT_VECU_EQ(expected, tokenize("2+1"))
+    EXPECT_VECU_EQ(expected, tokenize("2+1"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_10) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 10}));
-    EXPECT_VECU_EQ(expected, tokenize("10"))
+    EXPECT_VECU_EQ(expected, tokenize("10"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_10plus2) {
@@ -91,7 +91,7 @@ TEST(ITokenizerUnitTests, tokenize_10plus2) {
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 10}));
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_PLUS}));
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2}));
-    EXPECT_VECU_EQ(expected, tokenize("10+2"))
+    EXPECT_VECU_EQ(expected, tokenize("10+2"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_10plus2plus12) {
@@ -101,33 +101,33 @@ TEST(ITokenizerUnitTests, tokenize_10plus2plus12) {
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2}));
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_PLUS}));
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 12}));
-    EXPECT_VECU_EQ(expected, tokenize("10+2+12"))
+    EXPECT_VECU_EQ(expected, tokenize("10+2+12"));
 }
 
 // -
 TEST(ITokenizerUnitTests, tokenize_minus) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_MINUS}));
-    EXPECT_VECU_EQ(expected, tokenize("-"))
+    EXPECT_VECU_EQ(expected, tokenize("-"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_minus1) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_MINUS}));
     expected.push_back(std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1}));
-    EXPECT_VECU_EQ(expected, tokenize("-1"))
+    EXPECT_VECU_EQ(expected, tokenize("-1"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_multiply) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_MULTIPLY}));
-    EXPECT_VECU_EQ(expected, tokenize("*"))
+    EXPECT_VECU_EQ(expected, tokenize("*"));
 }
 
 TEST(ITokenizerUnitTests, tokenize_divide) {
     auto expected = std::vector<std::unique_ptr<node>>{};
     expected.push_back(std::make_unique<node>(node{.type = OPERATOR_DIVIDE}));
-    EXPECT_VECU_EQ(expected, tokenize("/"))
+    EXPECT_VECU_EQ(expected, tokenize("/"));
 }
 
 // parsing tests
