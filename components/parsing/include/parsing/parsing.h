@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace parsing {
-    typedef double mathtype;
+    typedef double float_t;
 
     enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
 
@@ -20,6 +20,6 @@ namespace parsing {
 
     std::vector<std::unique_ptr<node>> tokenize(const std::string& input);
     std::unique_ptr<node> parse(const std::string& input);
-    mathtype eval(const std::string& input);
+    float_t eval(const std::string& input);
 
 } // namespace parsing

@@ -2,7 +2,7 @@
 #include <view/view.h>
 namespace view {
 
-    std::string format(const parsing::mathtype& numeric_result) {
+    std::string format(const parsing::float_t& numeric_result) {
         // format double input value to minimum number of significant digits after .
 
         std::string result = std::to_string(numeric_result);

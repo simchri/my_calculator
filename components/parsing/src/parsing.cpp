@@ -170,7 +170,7 @@ namespace parsing {
         }
     }
 
-    mathtype apply_operation(const std::unique_ptr<node>& root) {
+    float_t apply_operation(const std::unique_ptr<node>& root) {
         if (root->type == NUM_LITERAL) {
             return root->value;
         } else if (root->type == OPERATOR_PLUS) {
@@ -193,7 +193,7 @@ namespace parsing {
      * @param input math expression to be evaluated.
      * @return The result of the evaluation
      */
-    mathtype eval(const std::string& input) {
+    float_t eval(const std::string& input) {
         auto root = parse(input);
         auto numeric_result = apply_operation(root);
         return numeric_result;
