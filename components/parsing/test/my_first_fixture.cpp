@@ -248,3 +248,7 @@ TEST(IEvaluationUnitTests, eval_division_integer) {
 TEST(IEvaluationUnitTests, eval_division_floatResult) {
     EXPECT_EQ(0.5, eval("1/2"));
 }
+
+TEST(IEvaluationUnitTests, eval_division_floatInput) {
+    EXPECT_EQ(1.5, eval("1+0.5"));
+}

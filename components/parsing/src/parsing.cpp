@@ -32,6 +32,10 @@ namespace parsing {
         return true;
     }
 
+    bool part_of_numeric_literal(char c) {
+        return std::isdigit(c) || c == '.';
+    }
+
     std::vector<std::unique_ptr<node>> tokenize(const std::string& input) {
 
         enum LexerState { LITERAL, OPERATOR };
@@ -47,7 +51,7 @@ namespace parsing {
         auto str_ind_end = input.length() - 1;
         while (str_ind <= str_ind_end) {
 
-            if (!std::isdigit(input[str_ind])) {
+            if (!part_of_numeric_literal(input[str_ind])) {
                 state = OPERATOR;
             } else {
                 state = LITERAL;
@@ -55,7 +59,7 @@ namespace parsing {
 
             if (state == LITERAL) {
 
-                if (str_ind >= str_ind_end || !std::isdigit(input.at(str_ind + 1))) {
+                if (str_ind >= str_ind_end || !part_of_numeric_literal(input.at(str_ind + 1))) {
 
                     literal = input.substr(str_ind_section_start, str_ind - str_ind_section_start + 1);
                     auto new_token = std::make_unique<node>(node{.type = NUM_LITERAL, .value = std::stod(literal)});
