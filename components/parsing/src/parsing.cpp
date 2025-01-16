@@ -185,7 +185,7 @@ namespace parsing {
      */
     int eval(const std::string& input) {
         auto root = parse(input);
-        return apply_operation(std::move(root));
+        return apply_operation(root);
     }
 
 
