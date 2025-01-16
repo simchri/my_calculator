@@ -195,8 +195,7 @@ namespace parsing {
      */
     float_t eval(const std::string& input) {
         auto root = parse(input);
-        auto numeric_result = apply_operation(root);
-        return numeric_result;
+        return apply_operation(root);
     }
 
 

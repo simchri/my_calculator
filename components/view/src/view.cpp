@@ -3,8 +3,8 @@
 namespace view {
 
     std::string format(const parsing::float_t& numeric_result) {
-        // format double input value to minimum number of significant digits after .
 
+        // format double input value to minimum number of significant digits after .
         std::string result = std::to_string(numeric_result);
         result.erase(result.find_last_not_of('0') + 1, std::string::npos);
 
