@@ -1,6 +1,11 @@
+#include <cmath>
 #include <parsing/parsing.h>
 
 namespace parsing {
+
+    bool nearly_equal(double a, double b) {
+        return std::nextafter(a, std::numeric_limits<double>::lowest()) <= b && std::nextafter(a, std::numeric_limits<double>::max()) >= b;
+    }
 
 
     bool node::operator==(const node& other) const {
@@ -8,7 +13,7 @@ namespace parsing {
             return false;
         }
 
-        if (type != other.type || value != other.value) {
+        if (type != other.type) {
             return false;
         }
 
@@ -17,6 +22,10 @@ namespace parsing {
         }
 
         if (right && *right != *other.right) {
+            return false;
+        }
+
+        if (!nearly_equal(value, other.value)) {
             return false;
         }
 
@@ -49,7 +58,7 @@ namespace parsing {
                 if (str_ind >= str_ind_end || !std::isdigit(input.at(str_ind + 1))) {
 
                     literal = input.substr(str_ind_section_start, str_ind - str_ind_section_start + 1);
-                    auto new_token = std::make_unique<node>(node{.type = NUM_LITERAL, .value = std::stoi(literal)});
+                    auto new_token = std::make_unique<node>(node{.type = NUM_LITERAL, .value = std::stod(literal)});
                     tokens.push_back(std::move(new_token));
                 }
 
@@ -161,7 +170,7 @@ namespace parsing {
         }
     }
 
-    int apply_operation(const std::unique_ptr<node>& root) {
+    mathtype apply_operation(const std::unique_ptr<node>& root) {
         if (root->type == NUM_LITERAL) {
             return root->value;
         } else if (root->type == OPERATOR_PLUS) {
@@ -177,15 +186,17 @@ namespace parsing {
         }
     }
 
+
     /**
      * Evaluate a math expression
      *
      * @param input math expression to be evaluated.
      * @return The result of the evaluation
      */
-    int eval(const std::string& input) {
+    mathtype eval(const std::string& input) {
         auto root = parse(input);
-        return apply_operation(root);
+        auto numeric_result = apply_operation(root);
+        return numeric_result;
     }
 
 
