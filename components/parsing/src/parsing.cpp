@@ -177,6 +177,12 @@ namespace parsing {
         }
     }
 
+    /**
+     * Evaluate a math expression
+     *
+     * @param input math expression to be evaluated.
+     * @return The result of the evaluation
+     */
     int eval(const std::string& input) {
         auto root = parse(input);
         return apply_operation(std::move(root));
