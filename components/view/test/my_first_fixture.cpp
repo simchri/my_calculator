@@ -9,7 +9,6 @@
 using namespace testing;
 
 
-
 TEST(IViewTests, onInput_updateLastLineInHistoryWithCurrentResult) {
     auto view = view::ViewModel();
     view.input = "1";
@@ -35,7 +34,7 @@ TEST(IViewTests, existingCalculation_onInput_updateLastHistoryLine) {
     EXPECT_EQ(view.history.at(0), "12 = 12");
 }
 
-TEST(IViewTests, existingCalculation_onDeleteLastChar_clearLastHistoryLine){
+TEST(IViewTests, existingCalculation_onDeleteLastChar_clearLastHistoryLine) {
     auto view = view::ViewModel();
     view.input = "1";
     view::on_new_char_entered(view);

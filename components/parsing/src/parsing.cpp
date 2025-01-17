@@ -1,6 +1,11 @@
+#include <cmath>
 #include <parsing/parsing.h>
 
 namespace parsing {
+
+    bool nearly_equal(double a, double b) {
+        return std::nextafter(a, std::numeric_limits<double>::lowest()) <= b && std::nextafter(a, std::numeric_limits<double>::max()) >= b;
+    }
 
 
     bool node::operator==(const node& other) const {
@@ -8,7 +13,7 @@ namespace parsing {
             return false;
         }
 
-        if (type != other.type || value != other.value) {
+        if (type != other.type) {
             return false;
         }
 
@@ -20,7 +25,15 @@ namespace parsing {
             return false;
         }
 
+        if (!nearly_equal(value, other.value)) {
+            return false;
+        }
+
         return true;
+    }
+
+    bool part_of_numeric_literal(char c) {
+        return std::isdigit(c) || c == '.';
     }
 
     std::vector<std::unique_ptr<node>> tokenize(const std::string& input) {
@@ -34,11 +47,11 @@ namespace parsing {
         std::vector<std::unique_ptr<node>> tokens;
 
         size_t str_ind = 0;
-        int str_ind_section_start = 0;
+        size_t str_ind_section_start = 0;
         auto str_ind_end = input.length() - 1;
         while (str_ind <= str_ind_end) {
 
-            if (!std::isdigit(input[str_ind])) {
+            if (!part_of_numeric_literal(input[str_ind])) {
                 state = OPERATOR;
             } else {
                 state = LITERAL;
@@ -46,10 +59,10 @@ namespace parsing {
 
             if (state == LITERAL) {
 
-                if (str_ind >= str_ind_end || !std::isdigit(input.at(str_ind + 1))) {
+                if (str_ind >= str_ind_end || !part_of_numeric_literal(input.at(str_ind + 1))) {
 
                     literal = input.substr(str_ind_section_start, str_ind - str_ind_section_start + 1);
-                    auto new_token = std::make_unique<node>(node{.type = NUM_LITERAL, .value = std::stoi(literal)});
+                    auto new_token = std::make_unique<node>(node{.type = NUM_LITERAL, .value = std::stod(literal)});
                     tokens.push_back(std::move(new_token));
                 }
 
@@ -161,7 +174,7 @@ namespace parsing {
         }
     }
 
-    int apply_operation(const std::unique_ptr<node>& root) {
+    float_t apply_operation(const std::unique_ptr<node>& root) {
         if (root->type == NUM_LITERAL) {
             return root->value;
         } else if (root->type == OPERATOR_PLUS) {
@@ -177,9 +190,16 @@ namespace parsing {
         }
     }
 
-    int eval(const std::string& input) {
+
+    /**
+     * Evaluate a math expression
+     *
+     * @param input math expression to be evaluated.
+     * @return The result of the evaluation
+     */
+    float_t eval(const std::string& input) {
         auto root = parse(input);
-        return apply_operation(std::move(root));
+        return apply_operation(root);
     }
 
 

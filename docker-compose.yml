@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: ./docker/Dockerfile
-    image: mydevimage
+    image: my-calculator-devenv
     tty: true # docker run -t
     stdin_open: true # docker run -i
     user: "${UID:?error}:${UID:?error}" # map user id of current user into container ("be yourself" in the container). If this variable is not seen by docker compose, do "export UID"
