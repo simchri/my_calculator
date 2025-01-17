@@ -36,3 +36,9 @@ RUN pip install --break-system-packages --no-cache-dir --upgrade pip && \
 RUN apt-get install -y clangd=1:14.0-55.7~deb12u1
 
 RUN apt-get install -y cppcheck=2.10-2
+
+RUN <<EOF
+file=/etc/bash.bashrc
+echo "shopt -s histappend" >> $file
+echo 'PROMPT_COMMAND="history -a;$PROMPT_COMMAND"' >> $file
+EOF
