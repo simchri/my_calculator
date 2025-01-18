@@ -3,7 +3,7 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <iostream>
-#include <view/view.h>
+import view;
 
 
 int main() {
