@@ -6,8 +6,6 @@ module;
 export module parsing;
 
 
-
-
 namespace parsing {
     export typedef double my_float_t;
 
