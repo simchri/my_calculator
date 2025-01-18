@@ -2,14 +2,24 @@
 FROM debian@sha256:9f3064e293387e18bb982af0d0a1eef29cbe4d1ad6bff01a2d55c2c033df6557
 
 # Install build requirements to build cmake (g++ git libssl-dev make) and some additional tools
-RUN apt-get update && apt-get install --yes g++ git libssl-dev make sudo curl vim gdb bash
+RUN apt-get update
+RUN apt-get install --yes \
+  bash \
+  clangd=1:19.0-63 \
+  cppcheck=2.16.0-1 \
+  curl \
+  g++ \
+  g++-14=14.2.0-14 \
+  gdb \
+  git \
+  libssl-dev \
+  make \
+  ninja-build=1.12.1-1 \
+  sudo \
+  vim
 
 # Build/install cmake
 RUN git clone --depth 1 --branch v3.31.3 https://gitlab.kitware.com/cmake/cmake.git /tmp/cmake-src && cd /tmp/cmake-src && ./bootstrap && make -j 20 && make install
-
-RUN apt-get install --yes ninja-build=1.12.1-1
-
-RUN apt-get install --yes g++-14=14.2.0-14
 
 ENTRYPOINT ["/bin/bash"]
 ENV TERM=xterm-256color
@@ -39,11 +49,6 @@ RUN pip install --break-system-packages --no-cache-dir setuptools
 # RUN pip install --break-system-packages --no-cache-dir --requirement /ext/benchmark/tools/requirements.txt
 # doing: (benchmark requirement file is outdated / not compat. with debian sid)
 RUN pip install --break-system-packages --no-cache-dir numpy==1.26.4 scipy==1.15.1
-
-RUN apt-get install --yes clangd=1:19.0-63
-
-RUN apt-get install --yes cppcheck=2.16.0-1
-
 
 RUN <<EOF
 file=/etc/bash.bashrc
