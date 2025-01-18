@@ -1,10 +1,10 @@
-import parsing;
 
 #include <view/view.h>
+import parsing;
 
 namespace view {
 
-    std::string format(const parsing::float_t& numeric_result) {
+    std::string format(const parsing::my_float_t& numeric_result) {
 
         // format double input value to minimum number of significant digits after .
         std::string result = std::to_string(numeric_result);

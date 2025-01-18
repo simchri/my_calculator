@@ -6,10 +6,10 @@ module;
 export module parsing;
 
 
-typedef double my_float_t;
 
 
 namespace parsing {
+    export typedef double my_float_t;
 
     export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
 
