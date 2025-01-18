@@ -14,6 +14,7 @@ string(APPEND compile_warning_options " -Wconversion" ) # enable warnings for im
 string(APPEND compile_warning_options " -Wfloat-conversion" ) # enable warnings for implicit conversions that reduce precision of a real value
 string(APPEND compile_warning_options " -Wsign-conversion" ) # enable warnings for conversions when assigning signed to unsigned type
 string(APPEND compile_warning_options " -pedantic-errors" ) # enables strict standard conformance
+string(APPEND compile_warning_options " -fmodules-ts" )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${compile_warning_options}")
 

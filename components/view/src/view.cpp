@@ -1,5 +1,7 @@
-#include <parsing/parsing.h>
+import parsing;
+
 #include <view/view.h>
+
 namespace view {
 
     std::string format(const parsing::float_t& numeric_result) {

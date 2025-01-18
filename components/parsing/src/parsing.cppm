@@ -1,7 +1,27 @@
+module;
 #include <cmath>
-#include <parsing/parsing.h>
+#include <memory>
+#include <vector>
+
+export module parsing;
+
+
+typedef double my_float_t;
+
 
 namespace parsing {
+
+    export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
+
+    export struct node {
+        Type type{UNDEFINED};
+        double value{0.0};
+        std::unique_ptr<node> left{};
+        std::unique_ptr<node> right{};
+
+        bool operator==(const node& other) const;
+    };
+
 
     bool nearly_equal(double a, double b) {
         return std::nextafter(a, std::numeric_limits<double>::lowest()) <= b && std::nextafter(a, std::numeric_limits<double>::max()) >= b;
@@ -36,7 +56,7 @@ namespace parsing {
         return std::isdigit(c) || c == '.';
     }
 
-    std::vector<std::unique_ptr<node>> tokenize(const std::string& input) {
+    export std::vector<std::unique_ptr<node>> tokenize(const std::string& input) {
 
         enum LexerState { LITERAL, OPERATOR };
 
@@ -111,7 +131,7 @@ namespace parsing {
         stack.push_back(std::move(op));
     }
 
-    std::unique_ptr<node> parse(const std::string& input) {
+    export std::unique_ptr<node> parse(const std::string& input) {
         auto tokens = tokenize(input);
 
         if (tokens.size() == 1) {
@@ -174,7 +194,7 @@ namespace parsing {
         }
     }
 
-    float_t apply_operation(const std::unique_ptr<node>& root) {
+    my_float_t apply_operation(const std::unique_ptr<node>& root) {
         if (root->type == NUM_LITERAL) {
             return root->value;
         } else if (root->type == OPERATOR_PLUS) {
@@ -197,10 +217,8 @@ namespace parsing {
      * @param input math expression to be evaluated.
      * @return The result of the evaluation
      */
-    float_t eval(const std::string& input) {
+    export my_float_t eval(const std::string& input) {
         auto root = parse(input);
         return apply_operation(root);
     }
-
-
 } // namespace parsing

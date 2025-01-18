@@ -1,5 +1,5 @@
 // unit / component under test:
-#include <parsing/parsing.h>
+import parsing;
 
 // rest :
 #include <benchmark/benchmark.h>
