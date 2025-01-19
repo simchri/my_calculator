@@ -84,3 +84,5 @@ tags
 # Language servers
 # clangd
 .cache
+
+apps/ftxexamples

@@ -1,8 +1,32 @@
+#include "ftxui/component/component.hpp"          // for Slider, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp" // for ScreenInteractive
+#include "ftxui/dom/elements.hpp" // for Elements, Element, operator|, separator, text, focusPositionRelative, size, border, flex, frame, bgcolor, gridbox, vbox, EQUAL, center, HEIGHT, WIDTH
+#include "ftxui/dom/elements.hpp" // for Elements, Element, operator|, separator, text, focusPositionRelative, size, border, flex, frame, bgcolor, gridbox, vbox, EQUAL, center, HEIGHT, WIDTH
+#include "ftxui/screen/color.hpp" // for Color
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 import view;
+
+
+using namespace ftxui;
+
+Element make_history_box(const view::ViewModel& vm) {
+    return window(text("results"),
+    vbox(
+            // Render each line's input field.
+            [&]() -> std::vector<Element> {
+                std::vector<Element> elements;
+                elements.reserve(vm.history.size());
+                for (auto& history_item : vm.history) {
+                    elements.push_back(paragraph(history_item));
+                }
+                return elements;
+            }())) |
+     flex;
+};
 
 
 int main() {
@@ -47,18 +71,7 @@ int main() {
 
     auto renderer = Renderer(component, [&] {
         return vbox({
-                window(text("results"),
-                       vbox(
-                               // Render each line's input field.
-                               [&]() -> std::vector<Element> {
-                                   std::vector<Element> elements;
-                                   elements.reserve(vm.history.size());
-                                   for (auto& history_item : vm.history) {
-                                       elements.push_back(paragraph(history_item));
-                                   }
-                                   return elements;
-                               }())) |
-                        flex,
+                make_history_box(vm),
                 input_box->Render() | border,
         });
     });
