@@ -42,3 +42,19 @@ TEST(IViewTests, existingCalculation_onDeleteLastChar_clearLastHistoryLine) {
     view::on_new_char_entered(view);
     EXPECT_EQ(view.history.at(0), "");
 }
+
+TEST(IViewTests, existingInvalidCalculation_onNewChar_noHistoryUpdate) {
+    // Previously caused a segfault:
+    auto view = view::ViewModel();
+    view.input = "1";
+    view::on_new_char_entered(view);
+    view.input = "1+";
+    view::on_new_char_entered(view);
+    view.input = "1+*";
+    view::on_new_char_entered(view);
+    view.input = "1+*1";
+    view::on_new_char_entered(view);
+    view.input = "1+*1-";
+    view::on_new_char_entered(view);
+    EXPECT_EQ(view.history.at(0), "1 = 1");
+}
