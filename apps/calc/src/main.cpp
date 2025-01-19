@@ -24,8 +24,7 @@ Element make_history_box(const view::ViewModel& vm) {
                     elements.push_back(paragraph(history_item));
                 }
                 return elements;
-            }())) |
-     flex;
+            }()));
 };
 
 
@@ -71,7 +70,7 @@ int main() {
 
     auto renderer = Renderer(component, [&] {
         return vbox({
-                make_history_box(vm),
+                make_history_box(vm) | flex,
                 input_box->Render() | border,
         });
     });
