@@ -1,8 +1,21 @@
-#include <parsing/parsing.h>
-#include <view/view.h>
-namespace view {
+module;
 
-    std::string format(const parsing::float_t& numeric_result) {
+#include <string>
+#include <vector>
+
+import parsing;
+
+export module view;
+
+namespace view {
+    export struct ViewModel {
+        std::vector<std::string> history;
+        std::string input;
+        std::string current_calculation;
+    };
+
+
+    std::string format(const parsing::my_float_t& numeric_result) {
 
         // format double input value to minimum number of significant digits after .
         std::string result = std::to_string(numeric_result);
@@ -16,7 +29,7 @@ namespace view {
         return result;
     }
 
-    void on_new_char_entered(ViewModel& vm) {
+    export void on_new_char_entered(ViewModel& vm) {
         try {
 
             if (vm.input.empty()) {
@@ -35,7 +48,7 @@ namespace view {
         }
     }
 
-    void on_enter(ViewModel& vm) {
+    export void on_enter(ViewModel& vm) {
         vm.history.emplace_back("");
     }
 

@@ -1,10 +1,10 @@
-// unit / component under test:
-#include <view/view.h>
-
 // rest :
 #include <benchmark/benchmark.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+// unit / component under test:
+import view;
 
 using namespace testing;
 

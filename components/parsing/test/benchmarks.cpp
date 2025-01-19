@@ -1,10 +1,10 @@
-// unit / component under test:
-#include <parsing/parsing.h>
-
 // rest :
 #include <benchmark/benchmark.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+// unit / component under test:
+import parsing;
 
 using namespace parsing;
 using namespace testing;
