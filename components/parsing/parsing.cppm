@@ -173,6 +173,13 @@ namespace parsing {
                 // get left element (stack) and right element (input)
                 auto left = pop_back(stack);
                 auto right = std::move(tokens[i + 1]);
+
+
+                // assert left and right are numeric literals
+                if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
+                    throw std::invalid_argument("Invalid syntax");
+                }
+
                 i++;
 
                 token->left = std::move(left);

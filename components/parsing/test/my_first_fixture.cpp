@@ -204,12 +204,36 @@ TEST(IASTNodeUnitTests, input_1_1_eq) {
  }
 
 
- TEST(IParserUnitTests, parse_times_1) {
+ TEST(IParserUnitTests, parse_invalidInput_times1) {
      EXPECT_THAT(
              []() {
                  parse("*1");
              },
              ThrowsMessage<std::invalid_argument>(HasSubstr("Missing operand")));
+ }
+
+ TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
+     EXPECT_THAT(
+             []() {
+                 parse("1+4/3+234+4+5+6+/3*34");
+             },
+             ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
+ }
+
+ TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
+     EXPECT_THAT(
+             []() {
+                 parse("1+*1");
+             },
+             ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
+ }
+
+ TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
+     EXPECT_THAT(
+             []() {
+                 parse("1+*1-");
+             },
+             ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
  }
 
  TEST(IEvaluationUnitTests, eval_1) {
