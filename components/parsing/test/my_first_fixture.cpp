@@ -221,6 +221,14 @@ TEST(IParserUnitTests, parse_invalidInput_times1) {
             ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
+TEST(IParserUnitTests, parse_invalidInput_1plus1overTimes) {
+    EXPECT_THAT(
+            []() {
+                parse("1+1/*");
+            },
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
+}
+
 TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
     EXPECT_THAT(
             []() {
