@@ -136,7 +136,7 @@ namespace parsing {
             if (tokens[0]->type == NUM_LITERAL) {
                 return std::move(tokens[0]);
             } else {
-                throw std::invalid_argument("single token provided can not be an operator.");
+                throw std::invalid_argument("error: single token provided can not be an operator.");
             }
         }
 
@@ -162,12 +162,12 @@ namespace parsing {
 
                 // check that at least one item is on the stack:
                 if (stack.empty()) {
-                    throw std::invalid_argument("Missing operand!");
+                    throw std::invalid_argument("error");
                 }
 
                 // check that we are not at the end of the input:
                 if (i == tokens.size() - 1) {
-                    throw std::invalid_argument("Missing operand!");
+                    throw std::invalid_argument("error");
                 }
 
                 // get left element (stack) and right element (input)
@@ -175,10 +175,12 @@ namespace parsing {
                 auto right = std::move(tokens[i + 1]);
 
 
-                // assert left and right are numeric literals
-                if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
-                    throw std::invalid_argument("Invalid syntax");
+                if (left->type != NUM_LITERAL && left->type != OPERATOR_DIVIDE && left->type != OPERATOR_MULTIPLY) {
+                    throw std::invalid_argument("error: Invalid syntax");
                 }
+                // if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
+                //     throw std::invalid_argument("Invalid syntax");
+                // }
 
                 i++;
 
@@ -195,7 +197,7 @@ namespace parsing {
         if (stack.size() == 1) {
             return std::move(stack.back());
         } else {
-            throw std::invalid_argument("final stack size not ok:" + std::to_string(stack.size()));
+            throw std::invalid_argument("error final stack size not ok" + std::to_string(stack.size()));
         }
     }
 

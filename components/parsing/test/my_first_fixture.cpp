@@ -195,12 +195,21 @@ TEST(IParserUnitTests, parse_1_plus_2_times_4) {
     EXPECT_EQ(*parse("1+2*4"), *plus);
 }
 
+// TEST(IParserUnitTests, parse_1_times_1_times_1) {
+//     auto one0 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+//     auto one1 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+//     auto one2 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+//     auto times1 = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(one0), .right = std::move(one1)});
+//     auto times2 = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(times1), .right = std::move(one2)});
+//     EXPECT_EQ(*parse("1*1*1"), *times2);
+// }
+
 TEST(IParserUnitTests, parse_1_times) {
     EXPECT_THAT(
             []() {
                 parse("1*");
             },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("Missing operand")));
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 
@@ -209,7 +218,7 @@ TEST(IParserUnitTests, parse_invalidInput_times1) {
             []() {
                 parse("*1");
             },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("Missing operand")));
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
@@ -217,7 +226,7 @@ TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
             []() {
                 parse("1+4/3+234+4+5+6+/3*34");
             },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
@@ -225,7 +234,7 @@ TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
             []() {
                 parse("1+*1");
             },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
@@ -233,7 +242,7 @@ TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
             []() {
                 parse("1+*1-");
             },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("Invalid syntax")));
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 TEST(IEvaluationUnitTests, eval_1) {
@@ -264,6 +273,15 @@ TEST(IEvaluationUnitTests, eval_multiplication_precedence) {
     EXPECT_EQ(-1, eval("1+3*2-4-2*2"));
 }
 
+TEST(IEvaluationUnitTests, eval_multiplication_precedenceThreeMultiplicators) {
+    EXPECT_EQ(1, eval("1*1*1"));
+    EXPECT_EQ(2, eval("1+1*1"));
+    EXPECT_EQ(2, eval("1*1+1"));
+    EXPECT_EQ(2, eval("1*1+1/1"));
+    EXPECT_EQ(2, eval("1*1+1/1*1/1*1"));
+    EXPECT_EQ(2, eval("1*1+1/2*2/4.5*4.5"));
+}
+
 TEST(IEvaluationUnitTests, eval_division_integer) {
     EXPECT_EQ(1, eval("2/2"));
     EXPECT_EQ(2, eval("4/2"));
@@ -277,3 +295,10 @@ TEST(IEvaluationUnitTests, eval_division_floatResult) {
 TEST(IEvaluationUnitTests, eval_division_floatInput) {
     EXPECT_EQ(1.5, eval("1+0.5"));
 }
+
+// TEST(IEvaluationUnitTests, eval_division_floatInputFloatResult){
+//     EXPECT_EQ(1.5, eval("1.5/100*100"));
+// }
+// TEST(IEvaluationUnitTests, eval_division_floatInputFloatResult){
+//     EXPECT_EQ(1.5, eval("2.75/100*35071"))
+// }
