@@ -129,6 +129,18 @@ namespace parsing {
         stack.push_back(std::move(op));
     }
 
+    bool is_balanced(const std::unique_ptr<node>& root) {
+        if (root->type == NUM_LITERAL) {
+            return true;
+        } else if (root->type == OPERATOR_PLUS || root->type == OPERATOR_MINUS) {
+            return root->left && root->right;
+        } else if (root->type == OPERATOR_MULTIPLY || root->type == OPERATOR_DIVIDE) {
+            return root->left && root->right;
+        } else {
+            throw std::runtime_error("error: unknown node type");
+        }
+    }
+
     export std::unique_ptr<node> parse(const std::string& input) {
         auto tokens = tokenize(input);
 
@@ -136,7 +148,7 @@ namespace parsing {
             if (tokens[0]->type == NUM_LITERAL) {
                 return std::move(tokens[0]);
             } else {
-                throw std::invalid_argument("single token provided can not be an operator.");
+                throw std::invalid_argument("error: single token provided can not be an operator.");
             }
         }
 
@@ -162,12 +174,12 @@ namespace parsing {
 
                 // check that at least one item is on the stack:
                 if (stack.empty()) {
-                    throw std::invalid_argument("Missing operand!");
+                    throw std::invalid_argument("error");
                 }
 
                 // check that we are not at the end of the input:
                 if (i == tokens.size() - 1) {
-                    throw std::invalid_argument("Missing operand!");
+                    throw std::invalid_argument("error");
                 }
 
                 // get left element (stack) and right element (input)
@@ -175,9 +187,19 @@ namespace parsing {
                 auto right = std::move(tokens[i + 1]);
 
 
-                // assert left and right are numeric literals
-                if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
-                    throw std::invalid_argument("Invalid syntax");
+                if (left->type != NUM_LITERAL && left->type != OPERATOR_DIVIDE && left->type != OPERATOR_MULTIPLY) {
+                    throw std::invalid_argument("error: Invalid syntax");
+                }
+                if (right->type != NUM_LITERAL && right->type != OPERATOR_DIVIDE && right->type != OPERATOR_MULTIPLY) {
+                    throw std::invalid_argument("error: Invalid syntax");
+                }
+
+                // if (!is_balanced(left)) {
+                //     throw std::invalid_argument("error: left subtree not balanced");
+                // }
+
+                if (!is_balanced(right)) {
+                    throw std::invalid_argument("error: right subtree not balanced");
                 }
 
                 i++;
@@ -195,7 +217,7 @@ namespace parsing {
         if (stack.size() == 1) {
             return std::move(stack.back());
         } else {
-            throw std::invalid_argument("final stack size not ok:" + std::to_string(stack.size()));
+            throw std::invalid_argument("error final stack size not ok" + std::to_string(stack.size()));
         }
     }
 
@@ -214,6 +236,7 @@ namespace parsing {
             throw std::runtime_error("unknown node type");
         }
     }
+
 
 
     /**
