@@ -127,23 +127,15 @@ TEST(ITokenizerUnitTests, tokenize_divide) {
     EXPECT_VECU_EQ(expected, tokenize("/"));
 }
 
-// parsing tests
+// parsing tests - error cases
 
-TEST(IParserUnitTests, parse_1) {
-    auto result = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-    EXPECT_EQ(*parse("1"), *result);
-}
-
-TEST(IParserUnitTests, parse_2) {
-    auto result = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2});
-    EXPECT_EQ(*parse("2"), *result.get());
-}
-
-TEST(IParserUnitTests, parse_1_plus_1) {
-    auto left = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-    auto right = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-    auto result = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(left), .right = std::move(right)});
-    EXPECT_EQ(*parse("1+1"), *result);
+// sample on how to test for contents of error message (not yet needed)
+TEST(IParserUnitTests, parse_1_times) {
+    EXPECT_THAT(
+            []() {
+                parse("1*");
+            },
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
 }
 
 TEST(IParserUnitTests, parse_plus_1) {
@@ -163,11 +155,59 @@ TEST(IParserUnitTests, parse_1_plus_1_plus_) {
 }
 
 TEST(IParserUnitTests, parse_1_plus_1_plus) {
-    EXPECT_THAT(
-            []() {
-                parse("1+1+");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("")));
+     EXPECT_THROW(parse("1+1+"),std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_times1) {
+    EXPECT_THROW(parse("*1"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_1plus1overTimes) {
+    EXPECT_THROW(parse("1+1/*"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_1overTimes) {
+    EXPECT_THROW(parse("1/*"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_1overTimesPlus1) {
+    EXPECT_THROW(parse("1/*+1"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_Misc) {
+    EXPECT_THROW(parse("**"), std::invalid_argument);
+    EXPECT_THROW(parse("*"), std::invalid_argument);
+    EXPECT_THROW(parse("+"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
+    EXPECT_THROW(parse("1+4/3+234+4+5+6+/3*34"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
+    EXPECT_THROW(parse("1+*1"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
+    EXPECT_THROW(parse("1+*1-"), std::invalid_argument);
+}
+
+// Parsing - happy path
+TEST(IParserUnitTests, parse_1) {
+    auto result = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    EXPECT_EQ(*parse("1"), *result);
+}
+
+TEST(IParserUnitTests, parse_2) {
+    auto result = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2});
+    EXPECT_EQ(*parse("2"), *result.get());
+}
+
+TEST(IParserUnitTests, parse_1_plus_1) {
+    auto left = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto right = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto result = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(left), .right = std::move(right)});
+    EXPECT_EQ(*parse("1+1"), *result);
 }
 
 TEST(IParserUnitTests, parse_1_plus_1_plus_1) {
@@ -195,64 +235,7 @@ TEST(IParserUnitTests, parse_1_plus_2_times_4) {
     EXPECT_EQ(*parse("1+2*4"), *plus);
 }
 
-// TEST(IParserUnitTests, parse_1_times_1_times_1) {
-//     auto one0 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-//     auto one1 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-//     auto one2 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
-//     auto times1 = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(one0), .right = std::move(one1)});
-//     auto times2 = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(times1), .right = std::move(one2)});
-//     EXPECT_EQ(*parse("1*1*1"), *times2);
-// }
-
-TEST(IParserUnitTests, parse_1_times) {
-    EXPECT_THAT(
-            []() {
-                parse("1*");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
-
-TEST(IParserUnitTests, parse_invalidInput_times1) {
-    EXPECT_THAT(
-            []() {
-                parse("*1");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
-TEST(IParserUnitTests, parse_invalidInput_1plus1overTimes) {
-    EXPECT_THAT(
-            []() {
-                parse("1+1/*");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
-TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
-    EXPECT_THAT(
-            []() {
-                parse("1+4/3+234+4+5+6+/3*34");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
-TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
-    EXPECT_THAT(
-            []() {
-                parse("1+*1");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
-TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
-    EXPECT_THAT(
-            []() {
-                parse("1+*1-");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
-
+// Evaluation
 TEST(IEvaluationUnitTests, eval_1) {
     EXPECT_EQ(1, eval("1"));
 }
