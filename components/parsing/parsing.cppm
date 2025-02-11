@@ -193,15 +193,10 @@ namespace parsing {
                 if (right->type != NUM_LITERAL && right->type != OPERATOR_DIVIDE && right->type != OPERATOR_MULTIPLY) {
                     throw std::invalid_argument("error: Invalid syntax");
                 }
-                // likely need to do something like "is left / right subtree balanced"
 
-                // if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
-                //     throw std::invalid_argument("Invalid syntax");
+                // if (!is_balanced(left)) {
+                //     throw std::invalid_argument("error: left subtree not balanced");
                 // }
-
-                if (!is_balanced(left)) {
-                    throw std::invalid_argument("error: left subtree not balanced");
-                }
 
                 if (!is_balanced(right)) {
                     throw std::invalid_argument("error: right subtree not balanced");
