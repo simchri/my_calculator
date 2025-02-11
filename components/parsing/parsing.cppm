@@ -133,9 +133,9 @@ namespace parsing {
         if (root->type == NUM_LITERAL) {
             return true;
         } else if (root->type == OPERATOR_PLUS || root->type == OPERATOR_MINUS) {
-            return root->left && is_balanced(root->left) && root->right && is_balanced(root->right);
+            return root->left && root->right;
         } else if (root->type == OPERATOR_MULTIPLY || root->type == OPERATOR_DIVIDE) {
-            return root->left && is_balanced(root->left) && root->right && is_balanced(root->right);
+            return root->left && root->right;
         } else {
             throw std::runtime_error("error: unknown node type");
         }
