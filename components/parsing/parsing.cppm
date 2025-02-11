@@ -129,6 +129,18 @@ namespace parsing {
         stack.push_back(std::move(op));
     }
 
+    bool is_balanced(const std::unique_ptr<node>& root) {
+        if (root->type == NUM_LITERAL) {
+            return true;
+        } else if (root->type == OPERATOR_PLUS || root->type == OPERATOR_MINUS) {
+            return root->left && is_balanced(root->left) && root->right && is_balanced(root->right);
+        } else if (root->type == OPERATOR_MULTIPLY || root->type == OPERATOR_DIVIDE) {
+            return root->left && is_balanced(root->left) && root->right && is_balanced(root->right);
+        } else {
+            throw std::runtime_error("error: unknown node type");
+        }
+    }
+
     export std::unique_ptr<node> parse(const std::string& input) {
         auto tokens = tokenize(input);
 
@@ -178,9 +190,22 @@ namespace parsing {
                 if (left->type != NUM_LITERAL && left->type != OPERATOR_DIVIDE && left->type != OPERATOR_MULTIPLY) {
                     throw std::invalid_argument("error: Invalid syntax");
                 }
+                if (right->type != NUM_LITERAL && right->type != OPERATOR_DIVIDE && right->type != OPERATOR_MULTIPLY) {
+                    throw std::invalid_argument("error: Invalid syntax");
+                }
+                // likely need to do something like "is left / right subtree balanced"
+
                 // if (left->type != NUM_LITERAL || right->type != NUM_LITERAL) {
                 //     throw std::invalid_argument("Invalid syntax");
                 // }
+
+                if (!is_balanced(left)) {
+                    throw std::invalid_argument("error: left subtree not balanced");
+                }
+
+                if (!is_balanced(right)) {
+                    throw std::invalid_argument("error: right subtree not balanced");
+                }
 
                 i++;
 
@@ -216,6 +241,7 @@ namespace parsing {
             throw std::runtime_error("unknown node type");
         }
     }
+
 
 
     /**
