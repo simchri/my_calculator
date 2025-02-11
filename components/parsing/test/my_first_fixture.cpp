@@ -150,10 +150,6 @@ TEST(IParserUnitTests, parse_1_plus) {
     EXPECT_THROW(parse("1+"), std::invalid_argument);
 }
 
-TEST(IParserUnitTests, parse_1_plus_1_plus_) {
-    EXPECT_THROW(parse("1+1+"), std::invalid_argument);
-}
-
 TEST(IParserUnitTests, parse_1_plus_1_plus) {
      EXPECT_THROW(parse("1+1+"),std::invalid_argument);
 }
