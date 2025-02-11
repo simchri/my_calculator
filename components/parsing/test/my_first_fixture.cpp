@@ -174,17 +174,11 @@ TEST(IParserUnitTests, parse_invalidInput_Misc) {
     EXPECT_THROW(parse("**"), std::invalid_argument);
     EXPECT_THROW(parse("*"), std::invalid_argument);
     EXPECT_THROW(parse("+"), std::invalid_argument);
-}
-
-TEST(IParserUnitTests, parse_invalidInput_plusDivide) {
+    EXPECT_THROW(parse("+*+"), std::invalid_argument);
+    EXPECT_THROW(parse("*+*"), std::invalid_argument);
+    EXPECT_THROW(parse("2*+*1"), std::invalid_argument);
     EXPECT_THROW(parse("1+4/3+234+4+5+6+/3*34"), std::invalid_argument);
-}
-
-TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1) {
     EXPECT_THROW(parse("1+*1"), std::invalid_argument);
-}
-
-TEST(IParserUnitTests, parse_invalidInput_onePlusTimes1Minus) {
     EXPECT_THROW(parse("1+*1-"), std::invalid_argument);
 }
 
