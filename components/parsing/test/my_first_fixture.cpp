@@ -129,14 +129,6 @@ TEST(ITokenizerUnitTests, tokenize_divide) {
 
 // parsing tests - error cases
 
-// sample on how to test for contents of error message (not yet needed)
-TEST(IParserUnitTests, parse_1_times) {
-    EXPECT_THAT(
-            []() {
-                parse("1*");
-            },
-            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
-}
 
 TEST(IParserUnitTests, parse_plus_1) {
     EXPECT_THROW(parse("+1"), std::invalid_argument);
@@ -158,6 +150,15 @@ TEST(IParserUnitTests, parse_invalidInput_times1) {
     EXPECT_THROW(parse("*1"), std::invalid_argument);
 }
 
+// sample on how to test for contents of error message (not yet needed)
+TEST(IParserUnitTests, parse_1_times) {
+    EXPECT_THAT(
+            []() {
+                parse("1*");
+            },
+            ThrowsMessage<std::invalid_argument>(HasSubstr("error")));
+}
+
 TEST(IParserUnitTests, parse_invalidInput_1plus1overTimes) {
     EXPECT_THROW(parse("1+1/*"), std::invalid_argument);
 }
@@ -173,9 +174,9 @@ TEST(IParserUnitTests, parse_invalidInput_1overTimesPlus1) {
 TEST(IParserUnitTests, parse_invalidInput_Misc) {
     EXPECT_THROW(parse("**"), std::invalid_argument);
     EXPECT_THROW(parse("*"), std::invalid_argument);
-    EXPECT_THROW(parse("+"), std::invalid_argument);
     EXPECT_THROW(parse("+*+"), std::invalid_argument);
     EXPECT_THROW(parse("*+*"), std::invalid_argument);
+    EXPECT_THROW(parse("//++"), std::invalid_argument);
     EXPECT_THROW(parse("2*+*1"), std::invalid_argument);
     EXPECT_THROW(parse("1+4/3+234+4+5+6+/3*34"), std::invalid_argument);
     EXPECT_THROW(parse("1+*1"), std::invalid_argument);
