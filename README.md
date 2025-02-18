@@ -46,7 +46,7 @@ Update the reference by replacing the file `components/parsing/test/baseline.jso
 
 Quicktest:
 ```
-clear && cmake --build . --target all && ctest -E benchmark # quicktest
+clear && cmake --build . --target all && ctest -E benchmark --output-on-failure # quicktest
 ```
 ### Run
 ```
