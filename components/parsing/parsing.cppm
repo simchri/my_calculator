@@ -201,16 +201,18 @@ namespace parsing {
                     throw std::invalid_argument("error");
                 }
 
+                // check that right element is not an opening brace
+                if (tokens[i + 1]->type == PARENTHESIS_OPEN) {
+                    stack.push_back(std::move(token));
+                    continue;
+                }
+
                 // get left element (stack) and right element (input)
                 auto left = pop_back(stack);
                 auto right = std::move(tokens[i + 1]);
 
 
-                if (left->type == OPERATOR_PLUS || left->type == OPERATOR_MINUS) {
-                    throw std::invalid_argument("error: Invalid syntax");
-                }
-
-                if (right->type == OPERATOR_PLUS || right->type == OPERATOR_MINUS) {
+                if (!is_balanced(left)) {
                     throw std::invalid_argument("error: Invalid syntax");
                 }
 
@@ -262,14 +264,12 @@ namespace parsing {
                 }
 
                 // Erase the moved elements from the original vector
-                stack.erase((it+1).base(), end);
+                stack.erase((it + 1).base(), end);
 
 
                 auto parsed_sub_tree = parse_inner(subset);
 
                 stack.push_back(std::move(parsed_sub_tree));
-
-                // open_parenthesis_flag = true;
             }
         }
 

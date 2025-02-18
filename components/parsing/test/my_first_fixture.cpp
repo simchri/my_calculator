@@ -310,6 +310,24 @@ TEST(IEvaluationUnitTests, eval_1_plus_1_plus_1_in_paras) {
     EXPECT_EQ(3, eval("1+(1+1)"));
 }
 
+TEST(IEvaluationUnitTests, eval_multiParenthesisPairs) {
+    EXPECT_EQ(5, eval("1+(1+1)+(1+1)"));
+}
+
+TEST(IEvaluationUnitTests, eval_nestedParenthesis) {
+    EXPECT_EQ(4, eval("1+(1+(1+1))"));
+}
+
+TEST(IEvaluationUnitTests, eval_multiplePairsOneUnbalanced_Throws){
+    EXPECT_THROW(eval("(1+1)+(1"), std::invalid_argument);
+    EXPECT_THROW(eval("(1+1+(1+1)"), std::invalid_argument);
+}
+
+TEST(IEvaluationUnitTests, eval_parenthesisMultiplicationPrecedence){
+    EXPECT_EQ(4, eval("(1+1)*2"));
+    EXPECT_EQ(4, eval("2*(1+1)"));
+}
+
 //
 // TEST(IEvaluationUnitTests, eval_noClosingPT_throw) {
 //     EXPECT_THROW(eval("(1"),std::invalid_argument);
