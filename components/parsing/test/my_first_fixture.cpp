@@ -289,15 +289,15 @@ TEST(IEvaluationUnitTests, eval_CP_throws) {
     EXPECT_THROW(eval(")"), std::invalid_argument);
 }
 
-TEST(IEvaluationUnitTests, eval_emptyParanthesisPair_throws) {
+TEST(IEvaluationUnitTests, eval_emptyParenthesisPair_throws) {
     EXPECT_THROW(eval("()"), std::invalid_argument);
 }
 
-TEST(IEvaluationUnitTests, eval_1_in_paranthesis) {
+TEST(IEvaluationUnitTests, eval_1_in_parenthesis) {
     EXPECT_EQ(1, eval("(1)"));
 }
 
-TEST(IEvaluationUnitTests, eval_1_plus_1_in_paranthesis) {
+TEST(IEvaluationUnitTests, eval_1_plus_1_in_parenthesis) {
     EXPECT_EQ(2, eval("(1+1)"));
 }
 
