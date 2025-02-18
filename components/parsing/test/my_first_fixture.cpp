@@ -303,8 +303,13 @@ TEST(IEvaluationUnitTests, eval_1_in_parenthesis) {
 
 TEST(IEvaluationUnitTests, eval_1_plus_1_in_paras_plus_1) {
     EXPECT_EQ(3, eval("(1+1)+1"));
-    // EXPECT_EQ(3, eval("1+(1+1)"));
 }
+
+// SFI: better test names
+TEST(IEvaluationUnitTests, eval_1_plus_1_plus_1_in_paras) {
+    EXPECT_EQ(3, eval("1+(1+1)"));
+}
+
 //
 // TEST(IEvaluationUnitTests, eval_noClosingPT_throw) {
 //     EXPECT_THROW(eval("(1"),std::invalid_argument);

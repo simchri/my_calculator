@@ -3,6 +3,7 @@ module;
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <ranges>
 #include <vector>
 
 export module parsing;
@@ -171,6 +172,8 @@ namespace parsing {
         std::vector<std::unique_ptr<node>> stack;
         stack.reserve(tokens.size());
 
+        bool open_parenthesis_flag = false;
+
         for (std::size_t i = 0; i < tokens.size(); ++i) {
             auto& token = tokens.at(i);
 
@@ -222,26 +225,51 @@ namespace parsing {
                 stack.push_back(std::move(token));
 
             } else if (token->type == PARENTHESIS_OPEN) {
+
                 stack.push_back(std::move(token));
+                open_parenthesis_flag = true;
 
             } else if (token->type == PARENTHESIS_CLOSE) {
-
-                if (stack.at(0)->type != PARENTHESIS_OPEN) {
+                if (!open_parenthesis_flag) {
                     throw std::invalid_argument("error: Invalid syntax, unbalanced parenthesis");
                 }
-
                 if (stack.size() == 1) {
                     throw std::invalid_argument("error: Invalid syntax, empty parenthesis pair");
                 }
 
-                stack.erase(stack.begin());
+                // find position of open parenthesis in stack
+                auto it = stack.rbegin();
+                for (; it != stack.rend(); ++it) {
+                    if ((*it)->type == PARENTHESIS_OPEN) {
+                        break;
+                    }
+                }
 
-                auto parsed_sub_tree = parse_inner(stack);
+                std::vector<std::unique_ptr<node>> subset;
+                subset.reserve(stack.size()); // TODO: can be smaller
 
-                stack.erase(stack.begin(), stack.end());
+                auto start = it.base();
+                auto end = stack.end();
+
+                // move range into subset
+                for (auto it = start; it != end; ++it) {
+                    subset.push_back(std::move(*it));
+                }
+
+                // print subset
+                for (auto& item : subset) {
+                    std::cout << item->type << std::endl;
+                }
+
+                // Erase the moved elements from the original vector
+                stack.erase((it+1).base(), end);
+
+
+                auto parsed_sub_tree = parse_inner(subset);
 
                 stack.push_back(std::move(parsed_sub_tree));
 
+                // open_parenthesis_flag = true;
             }
         }
 
