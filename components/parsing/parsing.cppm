@@ -187,19 +187,16 @@ namespace parsing {
                 auto right = std::move(tokens[i + 1]);
 
 
-                if (left->type != NUM_LITERAL && left->type != OPERATOR_DIVIDE && left->type != OPERATOR_MULTIPLY) {
-                    throw std::invalid_argument("error: Invalid syntax");
-                }
-                if (right->type != NUM_LITERAL && right->type != OPERATOR_DIVIDE && right->type != OPERATOR_MULTIPLY) {
+                if (left->type == OPERATOR_PLUS || left->type == OPERATOR_MINUS) {
                     throw std::invalid_argument("error: Invalid syntax");
                 }
 
-                // if (!is_balanced(left)) {
-                //     throw std::invalid_argument("error: left subtree not balanced");
-                // }
+                if (right->type == OPERATOR_PLUS || right->type == OPERATOR_MINUS) {
+                    throw std::invalid_argument("error: Invalid syntax");
+                }
 
                 if (!is_balanced(right)) {
-                    throw std::invalid_argument("error: right subtree not balanced");
+                    throw std::invalid_argument("error: Invalid syntax");
                 }
 
                 i++;
