@@ -242,7 +242,6 @@ namespace parsing {
 
                 stack.push_back(std::move(parsed_sub_tree));
 
-                i++;
             }
         }
 
@@ -255,7 +254,7 @@ namespace parsing {
             stack.pop_back();
             return back;
         } else {
-            throw std::invalid_argument("error final stack size not ok" + std::to_string(stack.size()));
+            throw std::invalid_argument("error final stack size not ok. Stack size: " + std::to_string(stack.size()));
         }
     }
 
