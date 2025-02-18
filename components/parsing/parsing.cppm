@@ -9,7 +9,16 @@ export module parsing;
 namespace parsing {
     export typedef double my_float_t;
 
-    export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE };
+    export enum Type {
+        UNDEFINED,
+        NUM_LITERAL,
+        OPERATOR_PLUS,
+        OPERATOR_MINUS,
+        OPERATOR_MULTIPLY,
+        OPERATOR_DIVIDE,
+        PARENTHESIS_OPEN,
+        PARENTHESIS_CLOSE
+    };
 
     export struct node {
         Type type{UNDEFINED};
@@ -99,6 +108,12 @@ namespace parsing {
                 } else if (input[str_ind] == '/') {
                     auto new_token = std::make_unique<node>(node{.type = OPERATOR_DIVIDE});
                     tokens.push_back(std::move(new_token));
+                } else if (input[str_ind] == '(') {
+                    auto new_token = std::make_unique<node>(node{.type = PARENTHESIS_OPEN});
+                    tokens.push_back(std::move(new_token));
+                } else if (input[str_ind] == ')') {
+                    auto new_token = std::make_unique<node>(node{.type = PARENTHESIS_CLOSE});
+                    tokens.push_back(std::move(new_token));
                 } else {
                     throw std::invalid_argument("unknown operator");
                 }
@@ -141,8 +156,7 @@ namespace parsing {
         }
     }
 
-    export std::unique_ptr<node> parse(const std::string& input) {
-        auto tokens = tokenize(input);
+    std::unique_ptr<node> parse_inner(std::vector<std::unique_ptr<node>>& tokens) {
 
         if (tokens.size() == 1) {
             if (tokens[0]->type == NUM_LITERAL) {
@@ -204,6 +218,21 @@ namespace parsing {
                 token->left = std::move(left);
                 token->right = std::move(right);
                 stack.push_back(std::move(token));
+
+            } else if (token->type == PARENTHESIS_OPEN) {
+                stack.push_back(std::move(token));
+
+            } else if (token->type == PARENTHESIS_CLOSE) {
+
+                if (stack.at(0)->type != PARENTHESIS_OPEN) {
+                    throw std::invalid_argument("error: Invalid syntax, unbalanced parenthesis"); // unbalanced parenthesis
+                }
+
+                stack.pop_back();
+
+                auto parsed_sub_tree = parse_inner(stack);
+                stack.push_back(std::move(parsed_sub_tree));
+
             }
         }
 
@@ -216,6 +245,12 @@ namespace parsing {
         } else {
             throw std::invalid_argument("error final stack size not ok" + std::to_string(stack.size()));
         }
+    }
+
+    export std::unique_ptr<node> parse(const std::string& input) {
+        auto tokens = tokenize(input);
+
+        return parse_inner(tokens);
     }
 
     my_float_t apply_operation(const std::unique_ptr<node>& root) {
@@ -233,7 +268,6 @@ namespace parsing {
             throw std::runtime_error("unknown node type");
         }
     }
-
 
 
     /**

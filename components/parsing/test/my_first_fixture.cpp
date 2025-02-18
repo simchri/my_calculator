@@ -143,7 +143,7 @@ TEST(IParserUnitTests, parse_1_plus) {
 }
 
 TEST(IParserUnitTests, parse_1_plus_1_plus) {
-     EXPECT_THROW(parse("1+1+"),std::invalid_argument);
+    EXPECT_THROW(parse("1+1+"), std::invalid_argument);
 }
 
 TEST(IParserUnitTests, parse_invalidInput_times1) {
@@ -278,3 +278,39 @@ TEST(IEvaluationUnitTests, eval_division_floatInput) {
     EXPECT_EQ(1.5, eval("1+0.5"));
     EXPECT_EQ(1.5, eval("1.5/100*100"));
 }
+
+// parenthesis
+
+TEST(IEvaluationUnitTests, eval_OP_throws) {
+    EXPECT_THROW(eval("("), std::invalid_argument);
+}
+
+TEST(IEvaluationUnitTests, eval_CP_throws) {
+    EXPECT_THROW(eval(")"), std::invalid_argument);
+}
+
+TEST(IEvaluationUnitTests, eval_emptyParanthesisPair_throws) {
+    EXPECT_THROW(eval("()"), std::invalid_argument);
+}
+
+TEST(IEvaluationUnitTests, eval_1_in_paranthesis) {
+    EXPECT_EQ(1, eval("(1)"));
+}
+
+TEST(IEvaluationUnitTests, eval_1_plus_1_in_paranthesis) {
+    EXPECT_EQ(2, eval("(1+1)"));
+}
+
+TEST(IEvaluationUnitTests, eval_1_plus_1_in_paras_plus_1) {
+    EXPECT_EQ(3, eval("(1+1)+1"));
+    EXPECT_EQ(3, eval("1+(1+1)"));
+}
+
+
+TEST(IEvaluationUnitTests, eval_noClosingPT_throw) {
+    EXPECT_THROW(eval("(1"),std::invalid_argument);
+}
+
+// TEST(IEvaluationUnitTests, eval_1_times_1_in_paras) {
+//     EXPECT_EQ(2, eval("1*(1)"));
+// }
