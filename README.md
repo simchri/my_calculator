@@ -44,6 +44,10 @@ ctest --output-on-failure -LE fast
 The test suite includes a google benchmark performance test, supplemented by a backstop logic. The performance is checked against a reference, if it has deteriorated, the test fails. This means this test can arbitrarily fail, when the check is run on a slower system. Exclude it from the suite with `-LE perf`.
 Update the reference by replacing the file `components/parsing/test/baseline.json` with a recent result (`build/components/parsing/test/contender.json`)
 
+Quicktest:
+```
+clear && cmake --build . --target all && ctest -E benchmark # quicktest
+```
 ### Run
 ```
 ./build/apps/my_calc/my_calc
