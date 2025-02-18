@@ -276,11 +276,5 @@ TEST(IEvaluationUnitTests, eval_division_floatResult) {
 
 TEST(IEvaluationUnitTests, eval_division_floatInput) {
     EXPECT_EQ(1.5, eval("1+0.5"));
+    EXPECT_EQ(1.5, eval("1.5/100*100"));
 }
-
-// TEST(IEvaluationUnitTests, eval_division_floatInputFloatResult){
-//     EXPECT_EQ(1.5, eval("1.5/100*100"));
-// }
-// TEST(IEvaluationUnitTests, eval_division_floatInputFloatResult){
-//     EXPECT_EQ(1.5, eval("2.75/100*35071"))
-// }
