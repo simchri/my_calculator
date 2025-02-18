@@ -328,6 +328,11 @@ TEST(IEvaluationUnitTests, eval_parenthesisMultiplicationPrecedence){
     EXPECT_EQ(4, eval("2*(1+1)"));
 }
 
+TEST(IEvaluationUnitTests, eval_multiplePrenthesis){
+    EXPECT_EQ(3, eval("(1*3)"));
+    // EXPECT_EQ(7, eval("2*(1+1)+(1*3)"));
+}
+
 //
 // TEST(IEvaluationUnitTests, eval_noClosingPT_throw) {
 //     EXPECT_THROW(eval("(1"),std::invalid_argument);

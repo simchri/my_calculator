@@ -165,7 +165,9 @@ namespace parsing {
             if (tokens[0]->type == NUM_LITERAL) {
                 return std::move(tokens[0]);
             } else {
-                throw std::invalid_argument("error: single token provided can not be an operator.");
+                if(!is_balanced(tokens[0])){
+                    throw std::invalid_argument("error: Invalid syntax");
+                }
             }
         }
 
@@ -259,17 +261,22 @@ namespace parsing {
                 }
 
                 // print subset
-                for (auto& item : subset) {
-                    std::cout << item->type << std::endl;
-                }
+                // for (auto& item : subset) {
+                //     std::cout << item->type << std::endl;
+                // }
 
                 // Erase the moved elements from the original vector
                 stack.erase((it + 1).base(), end);
 
+                // if the subset is just a single element, it does not require parsing and can directly be put on the stack:
+                if (subset.size() == 1) {
+                    stack.push_back(std::move(subset[0]));
+                } else {
+                    auto parsed_sub_tree = parse_inner(subset);
 
-                auto parsed_sub_tree = parse_inner(subset);
+                    stack.push_back(std::move(parsed_sub_tree));
+                }
 
-                stack.push_back(std::move(parsed_sub_tree));
             }
         }
 
