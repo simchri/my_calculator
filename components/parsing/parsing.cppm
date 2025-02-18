@@ -236,23 +236,13 @@ namespace parsing {
 
                 stack.erase(stack.begin());
 
-                std::cout << stack.size() << std::endl;
-                std::cout << (stack.at(0)->type == NUM_LITERAL) << std::endl;
-
                 auto parsed_sub_tree = parse_inner(stack);
 
                 stack.erase(stack.begin(), stack.end());
 
                 stack.push_back(std::move(parsed_sub_tree));
 
-                i++; // skip the closing parenthesis
-
-                std::cout << "finishing parsing of sub expression" << std::endl;
-
-                std::cout << stack.size() << std::endl;
-
-                std::cout << "is num literal?" << std::endl;
-                std::cout << (stack.at(0)->type == NUM_LITERAL) << std::endl;
+                i++;
             }
         }
 
