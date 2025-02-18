@@ -1,5 +1,7 @@
 module;
+#include <cassert>
 #include <cmath>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -169,8 +171,8 @@ namespace parsing {
         std::vector<std::unique_ptr<node>> stack;
         stack.reserve(tokens.size());
 
-        for (std::size_t i = 0; i != tokens.size(); ++i) {
-            auto& token = tokens[i];
+        for (std::size_t i = 0; i < tokens.size(); ++i) {
+            auto& token = tokens.at(i);
 
             if (token->type == NUM_LITERAL) {
                 stack.push_back(std::move(token));
@@ -225,14 +227,32 @@ namespace parsing {
             } else if (token->type == PARENTHESIS_CLOSE) {
 
                 if (stack.at(0)->type != PARENTHESIS_OPEN) {
-                    throw std::invalid_argument("error: Invalid syntax, unbalanced parenthesis"); // unbalanced parenthesis
+                    throw std::invalid_argument("error: Invalid syntax, unbalanced parenthesis");
                 }
 
-                stack.pop_back();
+                if (stack.size() == 1) {
+                    throw std::invalid_argument("error: Invalid syntax, empty parenthesis pair");
+                }
+
+                stack.erase(stack.begin());
+
+                std::cout << stack.size() << std::endl;
+                std::cout << (stack.at(0)->type == NUM_LITERAL) << std::endl;
 
                 auto parsed_sub_tree = parse_inner(stack);
+
+                stack.erase(stack.begin(), stack.end());
+
                 stack.push_back(std::move(parsed_sub_tree));
 
+                i++; // skip the closing parenthesis
+
+                std::cout << "finishing parsing of sub expression" << std::endl;
+
+                std::cout << stack.size() << std::endl;
+
+                std::cout << "is num literal?" << std::endl;
+                std::cout << (stack.at(0)->type == NUM_LITERAL) << std::endl;
             }
         }
 
@@ -241,7 +261,9 @@ namespace parsing {
         }
 
         if (stack.size() == 1) {
-            return std::move(stack.back());
+            auto back = std::move(stack.back());
+            stack.pop_back();
+            return back;
         } else {
             throw std::invalid_argument("error final stack size not ok" + std::to_string(stack.size()));
         }
