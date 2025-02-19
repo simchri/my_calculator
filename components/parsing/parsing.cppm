@@ -252,8 +252,6 @@ namespace parsing {
 
             } else if (token->type == OPERATOR_MULTIPLY || token->type == OPERATOR_DIVIDE) {
 
-                // strong operators, apply precedence
-
                 if (stack.empty()) {
                     throw std::invalid_argument("error: Stack empty, operator needs a left side argument");
                 }
