@@ -255,8 +255,9 @@ namespace parsing {
                     throw std::invalid_argument("error: End of input");
                 }
 
-
                 std::unique_ptr<node> right, left;
+
+                left = pop_back(stack);
 
                 // check that right element is not an opening brace
                 if (tokens[i + 1]->type == PARENTHESIS_OPEN) {
@@ -265,11 +266,8 @@ namespace parsing {
 
                     auto parsed_sub_tree = parse_inner(subset);
 
-                    left = pop_back(stack);
                     right = std::move(parsed_sub_tree);
                 } else {
-                    // get left element (stack) and right element (input)
-                    left = pop_back(stack);
                     right = std::move(tokens[i + 1]);
                 }
 
