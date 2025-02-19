@@ -286,6 +286,28 @@ TEST(IParserUnitTests, parse_op_1_plus_1_cp) {
     EXPECT_EQ(*parse("(1+1)"), *plus);
 }
 
+TEST(IParserUnitTests, parse_2_times_op_1_plus_1_cp) {
+    auto one0 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto one1 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto two = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2});
+
+    auto plus = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(one0), .right = std::move(one1)});
+    auto times = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(plus), .right = std::move(two)});
+
+    EXPECT_EQ(*parse("(1+1)*2"), *times);
+}
+
+// TEST(IParserUnitTests, parse_2_times_op_1_plus_1_cp) {
+//     auto one0 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+//     auto one1 = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+//     auto two = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 2});
+//
+//     auto plus = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(one0), .right = std::move(one1)});
+//     auto times = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(two), .right = std::move(plus)});
+//
+//     EXPECT_EQ(*parse("2*(1+1)"), *times);
+// }
+
 // Evaluation
 TEST(IEvaluationUnitTests, eval_1) {
     EXPECT_EQ(1, eval("1"));

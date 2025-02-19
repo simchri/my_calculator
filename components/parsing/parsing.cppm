@@ -232,6 +232,9 @@ namespace parsing {
                         nesting_level++;
                     } else if (tokens[j]->type == PARENTHESIS_CLOSE) {
                         nesting_level--;
+                        if (nesting_level == 0) {
+                            break;
+                        }
                     }
                     j++;
                 }
@@ -240,7 +243,16 @@ namespace parsing {
                     throw std::invalid_argument("error: Invalid syntax, no matching closing parenthesis");
                 }
 
-                pop_back(tokens);
+
+                std::vector<std::unique_ptr<node>> subset;
+                // move elements between i and j into subset;
+                for (std::size_t k = i; k <= j; ++k) {
+                    subset.push_back(std::move(tokens[k]));
+                }
+                // erase from tokens
+                tokens.erase(tokens.begin() + (std::_Bit_const_iterator::difference_type) i,
+                             tokens.begin() + (std::_Bit_const_iterator::difference_type) j);
+
 
             } else if (token->type == PARENTHESIS_CLOSE) {
                 throw std::invalid_argument("error: Invalid syntax, no matching opening parenthesis");
