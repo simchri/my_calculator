@@ -155,7 +155,7 @@ namespace parsing {
         } else if (root->type == OPERATOR_MULTIPLY || root->type == OPERATOR_DIVIDE) {
             return root->left && root->right;
         } else {
-            throw std::runtime_error("error: unknown node type");
+            throw std::invalid_argument("error: unknown node type");
         }
     }
 
@@ -195,12 +195,12 @@ namespace parsing {
 
                 // check that at least one item is on the stack:
                 if (stack.empty()) {
-                    throw std::invalid_argument("error");
+                    throw std::invalid_argument("error: Stack empty");
                 }
 
                 // check that we are not at the end of the input:
                 if (i == tokens.size() - 1) {
-                    throw std::invalid_argument("error");
+                    throw std::invalid_argument("error: End of input");
                 }
 
                 // check that right element is not an opening brace

@@ -330,7 +330,11 @@ TEST(IEvaluationUnitTests, eval_parenthesisMultiplicationPrecedence){
 
 TEST(IEvaluationUnitTests, eval_multiplePrenthesis){
     EXPECT_EQ(3, eval("(1*3)"));
-    // EXPECT_EQ(7, eval("2*(1+1)+(1*3)"));
+    EXPECT_EQ(7, eval("2*(1+1)+(1*3)"));
+}
+
+TEST(IEvaluationUnitTests, eval_multipleNestedParenthesis){
+    // EXPECT_EQ(31, eval("2*(1+1)+(1*3*(4+5))"));
 }
 
 //
