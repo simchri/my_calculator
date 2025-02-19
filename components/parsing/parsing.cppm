@@ -129,6 +129,12 @@ namespace parsing {
         return tokens;
     }
 
+    /**
+     * Pop the last element from a vector. Unlike the builtin pop_back method, this also removes the element from the vector.
+     *
+     * @param stack
+     * @return item the popped item.
+     */
     std::unique_ptr<node> pop_back(std::vector<std::unique_ptr<node>>& stack) {
 
         auto item = std::move(stack.back());
