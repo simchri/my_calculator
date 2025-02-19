@@ -159,6 +159,27 @@ namespace parsing {
         }
     }
 
+    void cut_out(std::size_t from, std::size_t to, std::vector<std::unique_ptr<node>>& input, std::vector<std::unique_ptr<node>>& subset) {
+        for (std::size_t k = from; k <= to; k++) {
+            subset.push_back(std::move(input[k]));
+        }
+
+        auto i_it = input.begin();
+        std::advance(i_it, from);
+
+        auto j_it = input.begin();
+        std::advance(j_it, to);
+
+        // debugging: print subset
+
+        // std::cout << "subset:" << std::endl;
+        // for (auto& item : subset) {
+        //     std::cout << item->type << " ";
+        // }
+        // std::cout << std::endl;
+
+        input.erase(i_it, j_it);
+    }
 
     /**
      * Given an input list of tokens, where the position of an opening parenthesis is known, cut out the parenthesis section from the list
@@ -199,29 +220,12 @@ namespace parsing {
             throw std::invalid_argument("error: No matching closing parenthesis found");
         }
 
-        j = j - 1; // end pos of parenthesis content
-
         subset.reserve(j - open_brace_pos);
 
-        for (std::size_t k = open_brace_pos + 1; k <= j; k++) {
-            subset.push_back(std::move(tokens[k]));
-        }
+        cut_out(open_brace_pos, j, tokens, subset);
 
-        auto i_it = tokens.begin();
-        std::advance(i_it, open_brace_pos);
-
-        auto j_it = tokens.begin();
-        std::advance(j_it, j + 1);
-
-        // debugging: print subset
-
-        // std::cout << "subset:" << std::endl;
-        // for (auto& item : subset) {
-        //     std::cout << item->type << " ";
-        // }
-        // std::cout << std::endl;
-
-        tokens.erase(i_it, j_it);
+        subset.erase(subset.begin());
+        subset.erase(subset.end());
     }
 
     std::unique_ptr<node> parse_inner(std::vector<std::unique_ptr<node>>& tokens) {
@@ -308,7 +312,6 @@ namespace parsing {
             } else if (token->type == PARENTHESIS_CLOSE) {
 
                 throw std::invalid_argument("error: Unbalanced Parenthesis");
-
             }
         }
 

@@ -356,7 +356,7 @@ TEST(IEvaluationUnitTests, eval_parenthesisAndFloats) {
     EXPECT_EQ(1.3, eval("(1.1+0.2)*1.0"));
 }
 
-TEST(IEvaluationUnitTests, eval_unbalancedParenthesis_Throw){
+TEST(IEvaluationUnitTests, eval_unbalancedParenthesis_Throw) {
     EXPECT_THROW(eval("2+2*(1+2+3))"), std::invalid_argument);
 }
 
