@@ -159,6 +159,58 @@ namespace parsing {
         }
     }
 
+    void cut_out_parenthesis(std::size_t i, std::vector<std::unique_ptr<node>>& tokens, std::vector<std::unique_ptr<node>>& subset) {
+
+                // find position of matching closing parenthesis in stack
+                uint parenthesis_level = 1;
+                auto j = i + 1;
+                bool found_matching_parenthesis = false;
+                for (; j < tokens.size(); ++j) {
+                    if (tokens[j]->type == PARENTHESIS_OPEN) {
+                        parenthesis_level += 1;
+                    }
+                    if (tokens[j]->type == PARENTHESIS_CLOSE) {
+                        parenthesis_level -= 1;
+                    }
+
+                    if (parenthesis_level == 0) {
+                        found_matching_parenthesis = true;
+                        break;
+                    }
+                }
+
+                if (!found_matching_parenthesis) {
+                    throw std::invalid_argument("error: No matching closing parenthesis found");
+                }
+
+                j = j - 1; // end pos of parenthesis content
+
+                subset.reserve(j - i);
+
+                // move range into subset
+                for (std::size_t k = i + 1; k <= j; k++) {
+                    subset.push_back(std::move(tokens[k]));
+                }
+
+
+                // get forward iterator at position i from tokens:
+                auto i_it = tokens.begin();
+                std::advance(i_it, i);
+
+                auto j_it = tokens.begin();
+                std::advance(j_it, j + 1);
+
+                // print subset
+                std::cout << "subset:" << std::endl;
+                for (auto& item : subset) {
+                    std::cout << item->type << " ";
+                }
+                std::cout << std::endl;
+
+                // Erase the moved elements from the original vector
+                tokens.erase(i_it, j_it);
+    }
+
     std::unique_ptr<node> parse_inner(std::vector<std::unique_ptr<node>>& tokens) {
 
         if (tokens.size() == 1) {
@@ -230,55 +282,8 @@ namespace parsing {
 
             } else if (token->type == PARENTHESIS_OPEN) {
 
-                // find position of matching closing parenthesis in stack
-                uint parenthesis_level = 1;
-                auto j = i + 1;
-                bool found_matching_parenthesis = false;
-                for (; j < tokens.size(); ++j) {
-                    if (tokens[j]->type == PARENTHESIS_OPEN) {
-                        parenthesis_level += 1;
-                    }
-                    if (tokens[j]->type == PARENTHESIS_CLOSE) {
-                        parenthesis_level -= 1;
-                    }
-
-                    if (parenthesis_level == 0) {
-                        found_matching_parenthesis = true;
-                        break;
-                    }
-                }
-
-                if (!found_matching_parenthesis) {
-                    throw std::invalid_argument("error: No matching closing parenthesis found");
-                }
-
-                j = j - 1; // end pos of parenthesis content
-
                 std::vector<std::unique_ptr<node>> subset;
-                subset.reserve(j - i);
-
-                // move range into subset
-                for (std::size_t k = i + 1; k <= j; k++) {
-                    subset.push_back(std::move(tokens[k]));
-                }
-
-
-                // get forward iterator at position i from tokens:
-                auto i_it = tokens.begin();
-                std::advance(i_it, i);
-
-                auto j_it = tokens.begin();
-                std::advance(j_it, j + 1);
-
-                // print subset
-                std::cout << "subset:" << std::endl;
-                for (auto& item : subset) {
-                    std::cout << item->type << " ";
-                }
-                std::cout << std::endl;
-
-                // Erase the moved elements from the original vector
-                tokens.erase(i_it, j_it);
+                cut_out_parenthesis(i, tokens, subset);
 
                 auto parsed_sub_tree = parse_inner(subset);
 
