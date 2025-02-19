@@ -9,7 +9,7 @@ export module parsing;
 namespace parsing {
     export typedef double my_float_t;
 
-    export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE, OPEN_PARENTHESIS, CLOSING_PARENTHESIS};
+    export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE, PARENTHESIS_OPEN, PARENTHESIS_CLOSE};
 
     export struct node {
         Type type{UNDEFINED};
@@ -100,10 +100,10 @@ namespace parsing {
                     auto new_token = std::make_unique<node>(node{.type = OPERATOR_DIVIDE});
                     tokens.push_back(std::move(new_token));
                 } else if (input[str_ind] == '(') {
-                    auto new_token = std::make_unique<node>(node{.type = OPEN_PARENTHESIS});
+                    auto new_token = std::make_unique<node>(node{.type = PARENTHESIS_OPEN});
                     tokens.push_back(std::move(new_token));
                 } else if (input[str_ind] == ')') {
-                    auto new_token = std::make_unique<node>(node{.type = CLOSING_PARENTHESIS});
+                    auto new_token = std::make_unique<node>(node{.type = PARENTHESIS_CLOSE});
                     tokens.push_back(std::move(new_token));
                 } else {
                     throw std::invalid_argument("unknown operator");

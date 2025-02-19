@@ -131,13 +131,13 @@ TEST(ITokenizerUnitTests, tokenize_divide) {
 
 TEST(ITokenizerUnitTests, tokenize_openPara) {
     auto expected = std::vector<std::unique_ptr<node>>{};
-    expected.push_back(std::make_unique<node>(node{.type = OPEN_PARENTHESIS}));
+    expected.push_back(std::make_unique<node>(node{.type = PARENTHESIS_OPEN}));
     EXPECT_VECU_EQ(expected, tokenize("("));
 }
 
 TEST(ITokenizerUnitTests, tokenize_closePara) {
     auto expected = std::vector<std::unique_ptr<node>>{};
-    expected.push_back(std::make_unique<node>(node{.type = CLOSING_PARENTHESIS}));
+    expected.push_back(std::make_unique<node>(node{.type = PARENTHESIS_CLOSE}));
     EXPECT_VECU_EQ(expected, tokenize(")"));
 }
 
