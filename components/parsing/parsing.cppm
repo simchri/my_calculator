@@ -171,7 +171,9 @@ namespace parsing {
      * @param tokens list of tokens
      * @param subset list of tokens inside the parenthesis
      */
-    void cut_out_parenthesis(std::size_t open_brace_pos, std::vector<std::unique_ptr<node>>& tokens, std::vector<std::unique_ptr<node>>& subset) {
+    void cut_out_parenthesis(std::size_t open_brace_pos,
+                             std::vector<std::unique_ptr<node>>& tokens,
+                             std::vector<std::unique_ptr<node>>& subset) {
 
         // find position of matching closing parenthesis in stack
         uint parenthesis_level = 1;
@@ -304,6 +306,9 @@ namespace parsing {
                 stack.push_back(std::move(parsed_sub_tree));
 
             } else if (token->type == PARENTHESIS_CLOSE) {
+
+                throw std::invalid_argument("error: Unbalanced Parenthesis");
+
             }
         }
 
