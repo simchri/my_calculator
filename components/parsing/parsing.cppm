@@ -166,9 +166,11 @@ namespace parsing {
         auto j = i + 1;
         bool found_matching_parenthesis = false;
         for (; j < tokens.size(); ++j) {
+
             if (tokens[j]->type == PARENTHESIS_OPEN) {
                 parenthesis_level += 1;
             }
+
             if (tokens[j]->type == PARENTHESIS_CLOSE) {
                 parenthesis_level -= 1;
             }
@@ -187,41 +189,34 @@ namespace parsing {
 
         subset.reserve(j - i);
 
-        // move range into subset
         for (std::size_t k = i + 1; k <= j; k++) {
             subset.push_back(std::move(tokens[k]));
         }
 
-
-        // get forward iterator at position i from tokens:
         auto i_it = tokens.begin();
         std::advance(i_it, i);
 
         auto j_it = tokens.begin();
         std::advance(j_it, j + 1);
 
-        // print subset
-        std::cout << "subset:" << std::endl;
-        for (auto& item : subset) {
-            std::cout << item->type << " ";
-        }
-        std::cout << std::endl;
+        // debugging: print subset
 
-        // Erase the moved elements from the original vector
+        // std::cout << "subset:" << std::endl;
+        // for (auto& item : subset) {
+        //     std::cout << item->type << " ";
+        // }
+        // std::cout << std::endl;
+
         tokens.erase(i_it, j_it);
     }
 
     std::unique_ptr<node> parse_inner(std::vector<std::unique_ptr<node>>& tokens) {
 
         if (tokens.size() == 1) {
-            if (tokens[0]->type == NUM_LITERAL) {
-                return std::move(tokens[0]);
-            } else {
-                if (!is_balanced(tokens[0])) {
-                    throw std::invalid_argument("error: Invalid syntax");
-                }
-                return std::move(tokens[0]);
+            if (!is_balanced(tokens[0])) {
+                throw std::invalid_argument("error: Invalid syntax");
             }
+            return std::move(tokens[0]);
         }
 
         std::vector<std::unique_ptr<node>> stack;
