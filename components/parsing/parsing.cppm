@@ -222,32 +222,6 @@ namespace parsing {
         return j;
     }
 
-    /**
-     * Given an input list of tokens, where the position of an opening parenthesis is known, cut out the parenthesis section from the list
-     * and place it in a new list, drop the parenthesis tokens at the edges of the new list.
-     *
-     * Example: input: tokens: 1+(2+3)*4, i: 3
-     *         output: tokens: 1++*4 subset: 2+3
-     *
-     * @param open_brace_pos position of the opening parenthesis
-     * @param tokens list of tokens
-     * @param subset list of tokens inside the parenthesis
-     */
-    void cut_out_parenthesis(std::size_t open_brace_pos,
-                             std::vector<std::unique_ptr<node>>& tokens,
-                             std::vector<std::unique_ptr<node>>& subset) {
-
-
-        auto j = matching_parenthesis_index(open_brace_pos, tokens);
-
-        subset.reserve(j - open_brace_pos);
-
-        cut_out(open_brace_pos, j, tokens, subset);
-
-        subset.erase(subset.begin());
-        subset.erase(subset.end());
-    }
-
     std::unique_ptr<node> parse_inner(std::vector<std::unique_ptr<node>>& tokens) {
 
         if (tokens.size() == 1) {
@@ -294,8 +268,17 @@ namespace parsing {
 
                 if (tokens[i + 1]->type == PARENTHESIS_OPEN) {
 
+
+                    auto open_brace_pos = i + 1;
+                    auto closing_brace_pos = matching_parenthesis_index(open_brace_pos, tokens);
+
                     std::vector<std::unique_ptr<node>> subset;
-                    cut_out_parenthesis(i + 1, tokens, subset);
+                    subset.reserve(closing_brace_pos - open_brace_pos);
+
+                    cut_out(open_brace_pos, closing_brace_pos, tokens, subset);
+
+                    subset.erase(subset.begin());
+                    subset.erase(subset.end());
 
                     auto parsed_sub_tree = parse_inner(subset);
 
@@ -322,10 +305,20 @@ namespace parsing {
 
             } else if (token->type == PARENTHESIS_OPEN) {
 
+
+                auto open_brace_pos = i;
+                auto closing_brace_pos = matching_parenthesis_index(open_brace_pos, tokens);
+
                 std::vector<std::unique_ptr<node>> subset;
-                cut_out_parenthesis(i, tokens, subset);
+                subset.reserve(closing_brace_pos - open_brace_pos);
+
+                cut_out(open_brace_pos, closing_brace_pos, tokens, subset);
+
+                subset.erase(subset.begin());
+                subset.erase(subset.end());
 
                 auto parsed_sub_tree = parse_inner(subset);
+
 
                 stack.push_back(std::move(parsed_sub_tree));
 
