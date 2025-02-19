@@ -127,6 +127,20 @@ TEST(ITokenizerUnitTests, tokenize_divide) {
     EXPECT_VECU_EQ(expected, tokenize("/"));
 }
 
+// parenthesis
+
+TEST(ITokenizerUnitTests, tokenize_openPara) {
+    auto expected = std::vector<std::unique_ptr<node>>{};
+    expected.push_back(std::make_unique<node>(node{.type = OPEN_PARENTHESIS}));
+    EXPECT_VECU_EQ(expected, tokenize("("));
+}
+
+TEST(ITokenizerUnitTests, tokenize_closePara) {
+    auto expected = std::vector<std::unique_ptr<node>>{};
+    expected.push_back(std::make_unique<node>(node{.type = CLOSING_PARENTHESIS}));
+    EXPECT_VECU_EQ(expected, tokenize(")"));
+}
+
 // parsing tests - error cases
 
 
