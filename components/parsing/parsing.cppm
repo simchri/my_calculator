@@ -159,11 +159,23 @@ namespace parsing {
         }
     }
 
-    void cut_out_parenthesis(std::size_t i, std::vector<std::unique_ptr<node>>& tokens, std::vector<std::unique_ptr<node>>& subset) {
+
+    /**
+     * Given an input list of tokens, where the position of an opening parenthesis is known, cut out the parenthesis section from the list
+     * and place it in a new list, drop the parenthesis tokens at the edges of the new list.
+     *
+     * Example: input: tokens: 1+(2+3)*4, i: 3
+     *         output: tokens: 1++*4 subset: 2+3
+     *
+     * @param open_brace_pos position of the opening parenthesis
+     * @param tokens list of tokens
+     * @param subset list of tokens inside the parenthesis
+     */
+    void cut_out_parenthesis(std::size_t open_brace_pos, std::vector<std::unique_ptr<node>>& tokens, std::vector<std::unique_ptr<node>>& subset) {
 
         // find position of matching closing parenthesis in stack
         uint parenthesis_level = 1;
-        auto j = i + 1;
+        auto j = open_brace_pos + 1;
         bool found_matching_parenthesis = false;
         for (; j < tokens.size(); ++j) {
 
@@ -187,14 +199,14 @@ namespace parsing {
 
         j = j - 1; // end pos of parenthesis content
 
-        subset.reserve(j - i);
+        subset.reserve(j - open_brace_pos);
 
-        for (std::size_t k = i + 1; k <= j; k++) {
+        for (std::size_t k = open_brace_pos + 1; k <= j; k++) {
             subset.push_back(std::move(tokens[k]));
         }
 
         auto i_it = tokens.begin();
-        std::advance(i_it, i);
+        std::advance(i_it, open_brace_pos);
 
         auto j_it = tokens.begin();
         std::advance(j_it, j + 1);
@@ -255,12 +267,14 @@ namespace parsing {
                 left = pop_back(stack);
 
                 if (tokens[i + 1]->type == PARENTHESIS_OPEN) {
+
                     std::vector<std::unique_ptr<node>> subset;
                     cut_out_parenthesis(i + 1, tokens, subset);
 
                     auto parsed_sub_tree = parse_inner(subset);
 
                     right = std::move(parsed_sub_tree);
+
                 } else {
                     right = std::move(tokens[i + 1]);
                 }

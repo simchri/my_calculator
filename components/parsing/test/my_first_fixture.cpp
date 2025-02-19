@@ -297,9 +297,9 @@ TEST(IEvaluationUnitTests, eval_1_in_parenthesis) {
     EXPECT_EQ(1, eval("(1)"));
 }
 
- TEST(IEvaluationUnitTests, eval_1_plus_1_in_parenthesis) {
-     EXPECT_EQ(2, eval("(1+1)"));
- }
+TEST(IEvaluationUnitTests, eval_1_plus_1_in_parenthesis) {
+    EXPECT_EQ(2, eval("(1+1)"));
+}
 
 TEST(IEvaluationUnitTests, eval_1_plus_1_in_paras_plus_1) {
     EXPECT_EQ(3, eval("(1+1)+1"));
@@ -318,23 +318,23 @@ TEST(IEvaluationUnitTests, eval_nestedParenthesis) {
     EXPECT_EQ(4, eval("1+(1+(1+1))"));
 }
 
-TEST(IEvaluationUnitTests, eval_multiplePairsOneUnbalanced_Throws){
+TEST(IEvaluationUnitTests, eval_multiplePairsOneUnbalanced_Throws) {
     EXPECT_THROW(eval("(1+1)+(1"), std::invalid_argument);
     EXPECT_THROW(eval("(1+1+(1+1)"), std::invalid_argument);
 }
 
-TEST(IEvaluationUnitTests, eval_parenthesisMultiplicationPrecedence){
+TEST(IEvaluationUnitTests, eval_parenthesisMultiplicationPrecedence) {
     EXPECT_EQ(4, eval("(1+1)*2"));
     EXPECT_EQ(4, eval("2*(1+1)"));
 }
 
-TEST(IEvaluationUnitTests, eval_multiplePrenthesis){
+TEST(IEvaluationUnitTests, eval_multiplePrenthesis) {
     EXPECT_EQ(3, eval("(1*3)"));
     EXPECT_EQ(7, eval("2*(1+1)+(1*3)"));
 }
 
-//multipl. + nested parenthesis
-TEST(IEvaluationUnitTests, eval_nestedParenthesisProduct){
+// multipl. + nested parenthesis
+TEST(IEvaluationUnitTests, eval_nestedParenthesisProduct) {
     EXPECT_EQ(8, eval("2*(2*(1+1))"));
     EXPECT_EQ(8, eval("2*(2+(1+1))"));
     EXPECT_EQ(6, eval("2+(2*(1+1))"));
@@ -342,12 +342,18 @@ TEST(IEvaluationUnitTests, eval_nestedParenthesisProduct){
     EXPECT_EQ(6, eval("2+((1+1)*2)"));
 }
 
-TEST(IEvaluationUnitTests, eval_ParenthesisAsSecondProductTerm){
+TEST(IEvaluationUnitTests, eval_ParenthesisAsSecondProductTerm) {
     EXPECT_EQ(12, eval("2*(1+2+3)"));
     EXPECT_EQ(14, eval("2+2*(1+2+3)"));
-    // EXPECT_EQ(26, eval("2+((1+1)*2*(1+2+3))"));
+    EXPECT_EQ(26, eval("2+((1+1)*2*(1+2+3))"));
+    EXPECT_EQ(11, eval("2+(1+1)*2*1+2+3"));
 }
 
+TEST(IEvaluationUnitTests, eval_parenthesisAndFloats) {
+    EXPECT_EQ(2.8, eval("2*(1+0.4)"));
+    EXPECT_EQ(4, eval("2+(1+1)*2*0.5"));
+    EXPECT_EQ(1.3, eval("(1.1+0.2)*1.0"));
+}
 // TEST(IEvaluationUnitTests, eval_unbalancedParenthesis_Throw){
 //     EXPECT_THROW(14, eval("2+2*(1+2+3))"), std::invalid_argument);
 // }
