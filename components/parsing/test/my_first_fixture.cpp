@@ -344,7 +344,7 @@ TEST(IEvaluationUnitTests, eval_nestedParenthesisProduct){
 
 TEST(IEvaluationUnitTests, eval_ParenthesisAsSecondProductTerm){
     EXPECT_EQ(12, eval("2*(1+2+3)"));
-    // EXPECT_EQ(14, eval("2+2*(1+2+3)"));
+    EXPECT_EQ(14, eval("2+2*(1+2+3)"));
     // EXPECT_EQ(26, eval("2+((1+1)*2*(1+2+3))"));
 }
 
