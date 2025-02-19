@@ -159,6 +159,17 @@ namespace parsing {
         }
     }
 
+    /**
+     * Given a list of nodes, cut out a subset of nodes from the list and place them in a new list.
+     *
+     * Example: input: tokens: 1+2+3, from: 1, to: 2
+     *         output: tokens: 1+3 subset: +2
+     *
+     * @param from start index of the subset
+     * @param to end index of the subset
+     * @param input list of nodes
+     * @param subset output container (vector) for the subset
+     */
     void cut_out(std::size_t from, std::size_t to, std::vector<std::unique_ptr<node>>& input, std::vector<std::unique_ptr<node>>& subset) {
 
         for (std::size_t i = from; i <= to; i++) {
@@ -182,24 +193,11 @@ namespace parsing {
         input.erase(begin, end);
     }
 
-    /**
-     * Given an input list of tokens, where the position of an opening parenthesis is known, cut out the parenthesis section from the list
-     * and place it in a new list, drop the parenthesis tokens at the edges of the new list.
-     *
-     * Example: input: tokens: 1+(2+3)*4, i: 3
-     *         output: tokens: 1++*4 subset: 2+3
-     *
-     * @param open_brace_pos position of the opening parenthesis
-     * @param tokens list of tokens
-     * @param subset list of tokens inside the parenthesis
-     */
-    void cut_out_parenthesis(std::size_t open_brace_pos,
-                             std::vector<std::unique_ptr<node>>& tokens,
-                             std::vector<std::unique_ptr<node>>& subset) {
+    size_t matching_parenthesis_index(size_t start_ind, std::vector<std::unique_ptr<node>>& tokens) {
 
         // find position of matching closing parenthesis in stack
         uint parenthesis_level = 1;
-        auto j = open_brace_pos + 1;
+        auto j = start_ind + 1;
         bool found_matching_parenthesis = false;
         for (; j < tokens.size(); ++j) {
 
@@ -220,6 +218,27 @@ namespace parsing {
         if (!found_matching_parenthesis) {
             throw std::invalid_argument("error: No matching closing parenthesis found");
         }
+
+        return j;
+    }
+
+    /**
+     * Given an input list of tokens, where the position of an opening parenthesis is known, cut out the parenthesis section from the list
+     * and place it in a new list, drop the parenthesis tokens at the edges of the new list.
+     *
+     * Example: input: tokens: 1+(2+3)*4, i: 3
+     *         output: tokens: 1++*4 subset: 2+3
+     *
+     * @param open_brace_pos position of the opening parenthesis
+     * @param tokens list of tokens
+     * @param subset list of tokens inside the parenthesis
+     */
+    void cut_out_parenthesis(std::size_t open_brace_pos,
+                             std::vector<std::unique_ptr<node>>& tokens,
+                             std::vector<std::unique_ptr<node>>& subset) {
+
+
+        auto j = matching_parenthesis_index(open_brace_pos, tokens);
 
         subset.reserve(j - open_brace_pos);
 
