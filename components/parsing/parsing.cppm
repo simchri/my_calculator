@@ -160,15 +160,10 @@ namespace parsing {
     }
 
     void cut_out(std::size_t from, std::size_t to, std::vector<std::unique_ptr<node>>& input, std::vector<std::unique_ptr<node>>& subset) {
-        for (std::size_t k = from; k <= to; k++) {
-            subset.push_back(std::move(input[k]));
+
+        for (std::size_t i = from; i <= to; i++) {
+            subset.push_back(std::move(input[i]));
         }
-
-        auto i_it = input.begin();
-        std::advance(i_it, from);
-
-        auto j_it = input.begin();
-        std::advance(j_it, to);
 
         // debugging: print subset
 
@@ -178,7 +173,13 @@ namespace parsing {
         // }
         // std::cout << std::endl;
 
-        input.erase(i_it, j_it);
+        auto begin = input.begin();
+        std::advance(begin, from);
+
+        auto end = input.begin();
+        std::advance(end, to);
+
+        input.erase(begin, end);
     }
 
     /**
