@@ -1,5 +1,6 @@
 module;
 #include <cmath>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -9,7 +10,16 @@ export module parsing;
 namespace parsing {
     export typedef double my_float_t;
 
-    export enum Type { UNDEFINED, NUM_LITERAL, OPERATOR_PLUS, OPERATOR_MINUS, OPERATOR_MULTIPLY, OPERATOR_DIVIDE, PARENTHESIS_OPEN, PARENTHESIS_CLOSE};
+    export enum Type {
+        UNDEFINED,
+        NUM_LITERAL,
+        OPERATOR_PLUS,
+        OPERATOR_MINUS,
+        OPERATOR_MULTIPLY,
+        OPERATOR_DIVIDE,
+        PARENTHESIS_OPEN,
+        PARENTHESIS_CLOSE
+    };
 
     export struct node {
         Type type{UNDEFINED};
@@ -210,6 +220,22 @@ namespace parsing {
                 token->left = std::move(left);
                 token->right = std::move(right);
                 stack.push_back(std::move(token));
+
+            } else if (token->type == PARENTHESIS_OPEN) {
+
+                // check if there is a corresponding closing parenthesis, otherwise throw invalid argument
+                // loop through remaining tokens, find matching parenthesis:
+                std::size_t j = i + 1;
+                while (j < tokens.size()) {
+                    if (tokens[j]->type == PARENTHESIS_CLOSE) {
+                        break;
+                    }
+                    j++;
+                }
+
+                if (j == tokens.size()) {
+                    throw std::invalid_argument("error: Invalid syntax, no matching closing parenthesis");
+                }
             }
         }
 
@@ -239,7 +265,6 @@ namespace parsing {
             throw std::runtime_error("unknown node type");
         }
     }
-
 
 
     /**

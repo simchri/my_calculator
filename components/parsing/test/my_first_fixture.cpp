@@ -157,7 +157,7 @@ TEST(IParserUnitTests, parse_1_plus) {
 }
 
 TEST(IParserUnitTests, parse_1_plus_1_plus) {
-     EXPECT_THROW(parse("1+1+"),std::invalid_argument);
+    EXPECT_THROW(parse("1+1+"), std::invalid_argument);
 }
 
 TEST(IParserUnitTests, parse_invalidInput_times1) {
@@ -196,6 +196,25 @@ TEST(IParserUnitTests, parse_invalidInput_Misc) {
     EXPECT_THROW(parse("1+*1"), std::invalid_argument);
     EXPECT_THROW(parse("1+*1-"), std::invalid_argument);
 }
+
+// parsing tests error cases - parenthesis
+
+TEST(IParserUnitTests, parse_invalidInput_po) {
+    EXPECT_THROW(parse("("), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_pc) {
+    EXPECT_THROW(parse(")"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_noMatchingClosingP_throw) {
+    EXPECT_THROW(parse("(1"), std::invalid_argument);
+    EXPECT_THROW(parse("(1+1"), std::invalid_argument);
+}
+
+// TEST(IParserUnitTests, parse_invalidInput_1_cp) {
+//     EXPECT_THROW(parse("1)"), std::invalid_argument);
+// }
 
 // Parsing - happy path
 TEST(IParserUnitTests, parse_1) {
@@ -238,6 +257,19 @@ TEST(IParserUnitTests, parse_1_plus_2_times_4) {
     auto times = std::make_unique<node>(node{.type = OPERATOR_MULTIPLY, .left = std::move(two), .right = std::move(four)});
     auto plus = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(one), .right = std::move(times)});
     EXPECT_EQ(*parse("1+2*4"), *plus);
+}
+
+// parsing happy path - parenthesis
+TEST(IParserUnitTests, parse_op_1_cp) {
+    auto one = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    EXPECT_EQ(*parse("(1)"), *one);
+}
+
+TEST(IParserUnitTests, parse_op_1_plus_2_cp) {
+    auto left = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto right = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
+    auto plus = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(left), .right = std::move(right)});
+    EXPECT_EQ(*parse("(1+1)"), *plus);
 }
 
 // Evaluation
