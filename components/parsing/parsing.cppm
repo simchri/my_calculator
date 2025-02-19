@@ -165,16 +165,16 @@ namespace parsing {
             if (tokens[0]->type == NUM_LITERAL) {
                 return std::move(tokens[0]);
             } else {
-                if(!is_balanced(tokens[0])){
+                if (!is_balanced(tokens[0])) {
                     throw std::invalid_argument("error: Invalid syntax");
                 }
+                return std::move(tokens[0]);
             }
         }
 
         std::vector<std::unique_ptr<node>> stack;
         stack.reserve(tokens.size());
 
-        bool open_parenthesis_flag = false;
 
         for (std::size_t i = 0; i < tokens.size(); ++i) {
             auto& token = tokens.at(i);
@@ -230,53 +230,61 @@ namespace parsing {
 
             } else if (token->type == PARENTHESIS_OPEN) {
 
-                stack.push_back(std::move(token));
-                open_parenthesis_flag = true;
+                // find position of matching closing parenthesis in stack
+                uint parenthesis_level = 1;
+                auto j = i + 1;
+                bool found_matching_parenthesis = false;
+                for (; j < tokens.size(); ++j) {
+                    if (tokens[j]->type == PARENTHESIS_OPEN) {
+                        parenthesis_level += 1;
+                    }
+                    if (tokens[j]->type == PARENTHESIS_CLOSE) {
+                        parenthesis_level -= 1;
+                    }
 
-            } else if (token->type == PARENTHESIS_CLOSE) {
-                if (!open_parenthesis_flag) {
-                    throw std::invalid_argument("error: Invalid syntax, unbalanced parenthesis");
-                }
-                if (stack.size() == 1) {
-                    throw std::invalid_argument("error: Invalid syntax, empty parenthesis pair");
-                }
-
-                // find position of open parenthesis in stack
-                auto it = stack.rbegin();
-                for (; it != stack.rend(); ++it) {
-                    if ((*it)->type == PARENTHESIS_OPEN) {
+                    if (parenthesis_level == 0) {
+                        found_matching_parenthesis = true;
                         break;
                     }
                 }
 
-                std::vector<std::unique_ptr<node>> subset;
-                subset.reserve(stack.size()); // TODO: can be smaller
+                if (!found_matching_parenthesis) {
+                    throw std::invalid_argument("error: No matching closing parenthesis found");
+                }
 
-                auto start = it.base();
-                auto end = stack.end();
+                j = j - 1; // end pos of parenthesis content
+
+                std::vector<std::unique_ptr<node>> subset;
+                subset.reserve(j - i);
 
                 // move range into subset
-                for (auto it = start; it != end; ++it) {
-                    subset.push_back(std::move(*it));
+                for (std::size_t k = i + 1; k <= j; k++) {
+                    subset.push_back(std::move(tokens[k]));
                 }
+
+
+                // get forward iterator at position i from tokens:
+                auto i_it = tokens.begin();
+                std::advance(i_it, i);
+
+                auto j_it = tokens.begin();
+                std::advance(j_it, j + 1);
 
                 // print subset
-                // for (auto& item : subset) {
-                //     std::cout << item->type << std::endl;
-                // }
+                std::cout << "subset:" << std::endl;
+                for (auto& item : subset) {
+                    std::cout << item->type << " ";
+                }
+                std::cout << std::endl;
 
                 // Erase the moved elements from the original vector
-                stack.erase((it + 1).base(), end);
+                tokens.erase(i_it, j_it);
 
-                // if the subset is just a single element, it does not require parsing and can directly be put on the stack:
-                if (subset.size() == 1) {
-                    stack.push_back(std::move(subset[0]));
-                } else {
-                    auto parsed_sub_tree = parse_inner(subset);
+                auto parsed_sub_tree = parse_inner(subset);
 
-                    stack.push_back(std::move(parsed_sub_tree));
-                }
+                stack.push_back(std::move(parsed_sub_tree));
 
+            } else if (token->type == PARENTHESIS_CLOSE) {
             }
         }
 

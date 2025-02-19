@@ -333,9 +333,24 @@ TEST(IEvaluationUnitTests, eval_multiplePrenthesis){
     EXPECT_EQ(7, eval("2*(1+1)+(1*3)"));
 }
 
-TEST(IEvaluationUnitTests, eval_multipleNestedParenthesis){
-    // EXPECT_EQ(31, eval("2*(1+1)+(1*3*(4+5))"));
+//multipl. + nested parenthesis
+TEST(IEvaluationUnitTests, eval_nestedParenthesisProduct){
+    EXPECT_EQ(8, eval("2*(2*(1+1))"));
+    EXPECT_EQ(8, eval("2*(2+(1+1))"));
+    EXPECT_EQ(6, eval("2+(2*(1+1))"));
+
+    EXPECT_EQ(6, eval("2+((1+1)*2)"));
 }
+
+TEST(IEvaluationUnitTests, eval_ParenthesisAsSecondProductTerm){
+    EXPECT_EQ(12, eval("2*(1+2+3)"));
+    // EXPECT_EQ(14, eval("2+2*(1+2+3)"));
+    // EXPECT_EQ(26, eval("2+((1+1)*2*(1+2+3))"));
+}
+
+// TEST(IEvaluationUnitTests, eval_unbalancedParenthesis_Throw){
+//     EXPECT_THROW(14, eval("2+2*(1+2+3))"), std::invalid_argument);
+// }
 
 //
 // TEST(IEvaluationUnitTests, eval_noClosingPT_throw) {
