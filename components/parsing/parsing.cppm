@@ -224,13 +224,15 @@ namespace parsing {
 
 
         for (std::size_t i = 0; i < tokens.size(); ++i) {
+
             auto& token = tokens.at(i);
 
             if (token->type == NUM_LITERAL) {
+
                 stack.push_back(std::move(token));
+
             } else if (token->type == OPERATOR_PLUS || token->type == OPERATOR_MINUS) {
 
-                // weak operators
                 if (stack.size() == 3) {
                     collapse_group(stack);
                 }
@@ -240,21 +242,18 @@ namespace parsing {
 
                 // strong operators, apply precedence
 
-                // check that at least one item is on the stack:
                 if (stack.empty()) {
-                    throw std::invalid_argument("error: Stack empty");
+                    throw std::invalid_argument("error: Stack empty, operator needs a left side argument");
                 }
 
-                // check that we are not at the end of the input:
                 if (i == tokens.size() - 1) {
-                    throw std::invalid_argument("error: End of input");
+                    throw std::invalid_argument("error: End of input, operator needs a right side argument");
                 }
 
                 std::unique_ptr<node> right, left;
 
                 left = pop_back(stack);
 
-                // check that right element is not an opening brace
                 if (tokens[i + 1]->type == PARENTHESIS_OPEN) {
                     std::vector<std::unique_ptr<node>> subset;
                     cut_out_parenthesis(i + 1, tokens, subset);
