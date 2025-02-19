@@ -226,16 +226,24 @@ namespace parsing {
                 // check if there is a corresponding closing parenthesis, otherwise throw invalid argument
                 // loop through remaining tokens, find matching parenthesis:
                 std::size_t j = i + 1;
+                uint nesting_level = 1;
                 while (j < tokens.size()) {
-                    if (tokens[j]->type == PARENTHESIS_CLOSE) {
-                        break;
+                    if (tokens[j]->type == PARENTHESIS_OPEN) {
+                        nesting_level++;
+                    } else if (tokens[j]->type == PARENTHESIS_CLOSE) {
+                        nesting_level--;
                     }
                     j++;
                 }
 
-                if (j == tokens.size()) {
+                if (nesting_level > 0) {
                     throw std::invalid_argument("error: Invalid syntax, no matching closing parenthesis");
                 }
+
+                pop_back(tokens);
+
+            } else if (token->type == PARENTHESIS_CLOSE) {
+                throw std::invalid_argument("error: Invalid syntax, no matching opening parenthesis");
             }
         }
 

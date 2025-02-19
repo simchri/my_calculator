@@ -210,6 +210,20 @@ TEST(IParserUnitTests, parse_invalidInput_pc) {
 TEST(IParserUnitTests, parse_invalidInput_noMatchingClosingP_throw) {
     EXPECT_THROW(parse("(1"), std::invalid_argument);
     EXPECT_THROW(parse("(1+1"), std::invalid_argument);
+    EXPECT_THROW(parse("((1+1)"), std::invalid_argument);
+
+    EXPECT_THROW(parse("(1+1)+(2"), std::invalid_argument);
+    EXPECT_THROW(parse("1+(1-(1+1)+2"), std::invalid_argument);
+
+    EXPECT_THROW(parse("(1*(3+1)"), std::invalid_argument);
+}
+
+TEST(IParserUnitTests, parse_invalidInput_noMatchingOpeningP_throw) {
+    EXPECT_THROW(parse("1)"), std::invalid_argument);
+    // EXPECT_THROW(parse("1+1)"), std::invalid_argument);
+    // EXPECT_THROW(parse("1+1)+2)"), std::invalid_argument);
+    // EXPECT_THROW(parse("1+(1-(1+1)+2))"), std::invalid_argument);
+    // EXPECT_THROW(parse("1*(3+1))"), std::invalid_argument);
 }
 
 // TEST(IParserUnitTests, parse_invalidInput_1_cp) {
@@ -265,7 +279,7 @@ TEST(IParserUnitTests, parse_op_1_cp) {
     EXPECT_EQ(*parse("(1)"), *one);
 }
 
-TEST(IParserUnitTests, parse_op_1_plus_2_cp) {
+TEST(IParserUnitTests, parse_op_1_plus_1_cp) {
     auto left = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
     auto right = std::make_unique<node>(node{.type = NUM_LITERAL, .value = 1});
     auto plus = std::make_unique<node>(node{.type = OPERATOR_PLUS, .left = std::move(left), .right = std::move(right)});
